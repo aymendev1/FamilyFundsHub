@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Noto+Sans:wght@300;400;500;600&display=swap");
+:root {
+  --bigText: "Lato", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+  }
+}
+
+body {
+  font-family: "Noto Sans", sans-serif;
+}
+.illustration {
+  background: url("./illustration.png"),
+    linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.illustration > div:nth-of-type(1) {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.bigText {
+  font-family: var(--bigText);
+}
