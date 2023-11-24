@@ -7,7 +7,6 @@ import {
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid";
 function sidebarData(props) {
-  const { toggle } = props;
   const Data = [
     { icon: HomeIcon, text: "Dashboard", link: "/dashboard" },
     { icon: CreditCardIcon, text: "To decide", link: "#" },
@@ -26,12 +25,7 @@ function sidebarData(props) {
               className=" flex items-center mt-2 p-4 gap-2 h-[3.5rem] rounded-lg cursor-pointer text-blue-950 hover:bg-blue-400 hover:text-white transition-all duration-300"
             >
               <data.icon className="min-w-[25px] h-[25px] " />
-              <Link
-                className={`${
-                  toggle ? "opacity-0 delay-50 " : ""
-                } text-[1rem] font-medium `}
-                href={data.link}
-              >
+              <Link className={`text-[1rem] font-medium `} href={data.link}>
                 {data.text}
               </Link>
             </div>
@@ -41,10 +35,7 @@ function sidebarData(props) {
       {/* Logout button */}
       <div className=" flex items-center mt-2 p-4 gap-2 h-[3.5rem] rounded-lg cursor-pointer text-blue-950 hover:bg-blue-400 hover:text-white transition-all duration-300">
         <ArrowRightOnRectangleIcon className="min-w-[25px] h-[25px] " />
-        <Link
-          href="/logout"
-          className={`${toggle ? "opacity-0 delay-200" : ""} font-medium `}
-        >
+        <Link href="/logout" className={` font-medium `}>
           Log out
         </Link>
       </div>
