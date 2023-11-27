@@ -31,9 +31,36 @@ body {
 
 .card {
   background: rgba(23, 37, 84, 0.65);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  /*  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); */
   backdrop-filter: blur(8.5px);
   -webkit-backdrop-filter: blur(8.5px);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.blob-8 {
+  aspect-ratio: 1;
+  background: radial-gradient(farthest-side at right, #fff 98%) 20% 50%/40% 80%,
+    radial-gradient(farthest-side at left, #fff 98%) 80% 50%/40% 80%;
+  background-repeat: no-repeat;
+  animation: b8 0.8s infinite alternate;
+}
+
+/* width */
+.familyChartCard::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+.familyChartCard::-webkit-scrollbar-track {
+  background: white;
+}
+
+/* Handle */
+.familyChartCard::-webkit-scrollbar-thumb {
+  background: #17255480;
+}
+
+/* Handle on hover */
+.familyChartCard::-webkit-scrollbar-thumb:hover {
+  background: #172554;
 }
