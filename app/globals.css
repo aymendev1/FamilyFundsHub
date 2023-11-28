@@ -61,6 +61,24 @@ body {
 }
 
 /* Handle on hover */
-.familyChartCard::-webkit-scrollbar-thumb:hover {
+section:-webkit-scrollbar-thumb:hover {
+  background: #172554;
+}
+section::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+section::-webkit-scrollbar-track {
+  background: white;
+}
+
+/* Handle */
+section::-webkit-scrollbar-thumb {
+  background: #17255480;
+}
+
+/* Handle on hover */
+section::-webkit-scrollbar-thumb:hover {
   background: #172554;
 }
