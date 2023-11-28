@@ -8,8 +8,9 @@ function FamilyChartCard() {
           Family Members
         </span>
       </div>
-      <div className="flex justify-between flex-row items-center w-full">
-        <span className="text-md  text-slate-700">Parents : </span>
+      <span className="text-md  text-slate-700">Parents : </span>
+      <div className="flex justify-between flex-row items-center w-full ">
+    
         <div className="flex flex-col items-center gap-2 justify-center">
           <Image
             src="/fatherDefaultPP.jpg"
@@ -32,8 +33,9 @@ function FamilyChartCard() {
           <span>Mother's Name</span>
         </div>
       </div>
+      <span className="text-md  text-slate-700">Children : </span>
       <div className="flex flex-col gap-2 overflow-scroll overflow-x-hidden scroll-smooth familyChartCard">
-        <span className="text-md  text-slate-700">Children : </span>
+        
         <div className="flex flex-row gap-4 items-center ">
           <Image
             src="/boyDefaultPP.jpg"
