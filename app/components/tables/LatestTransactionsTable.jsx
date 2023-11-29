@@ -1,8 +1,12 @@
+"use client";
 import DataTable from "react-data-table-component";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import Image from "next/image";
+import { Suspense } from "react";
+import Loading from "@/app/components/loadings/tableLoading";
 export default function LatestTransactionsTable() {
   const [selectedRows, setSelectedRows] = useState([]);
+  const [loading, setLoading] = useState(true);
   const customStyles = {
     rows: {
       style: {
@@ -28,9 +32,6 @@ export default function LatestTransactionsTable() {
       },
     },
   };
-  useEffect(() => {
-    console.log("state", selectedRows);
-  }, [selectedRows]);
 
   const handleButtonClick = () => {
     console.log("clicked");
@@ -50,6 +51,7 @@ export default function LatestTransactionsTable() {
             width="40"
             height="40"
             className="rounded-lg object-cover"
+            alt={`${row.name} Profile Picture`}
           />
           <span className="font-black">{row.name}</span>
         </div>
@@ -58,27 +60,22 @@ export default function LatestTransactionsTable() {
     {
       name: "Description",
       selector: (row) => row.description,
-      sortable: true,
     },
     {
       name: "Status",
       selector: (row) => row.status,
-      sortable: true,
     },
     {
       name: "Category",
       selector: (row) => row.category,
-      sortable: true,
     },
     {
       name: "Total",
       selector: (row) => "$ " + row.total,
-      sortable: true,
     },
     {
       name: "Date",
       selector: (row) => row.date,
-      sortable: true,
     },
   ];
 
@@ -144,12 +141,23 @@ export default function LatestTransactionsTable() {
       date: "2022-10-20",
     },
   ];
+  useEffect(() => {
+    console.log("state", selectedRows);
+  }, [selectedRows]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <DataTable
       data={data}
       columns={columns}
       customStyles={customStyles}
+      progressPending={loading}
+      progressComponent={<Loading />}
       responsive
       pagination
     />
