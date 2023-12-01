@@ -82,3 +82,19 @@ section::-webkit-scrollbar-thumb {
 section::-webkit-scrollbar-thumb:hover {
   background: #172554;
 }
+.quickTransferImages::-webkit-scrollbar {
+  height: 4px;
+}
+.quickTransferImages::-webkit-scrollbar-track {
+  background: white;
+}
+
+/* Handle */
+.quickTransferImages::-webkit-scrollbar-thumb {
+  background: #17255480;
+  width: 1px;
+}
+.quickTransferImages::-webkit-scrollbar-thumb:hover {
+  background: #172554;
+  cursor: pointer;
+}
