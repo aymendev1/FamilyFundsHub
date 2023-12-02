@@ -13,7 +13,7 @@ function ActionMenu() {
     { title: "View 06", link: "/link02" },
   ];
   return (
-    <div className="flex flex-col gap-4 w-[30%] h-[631px] max-lg:w-full  bg-white rounded-lg p-4">
+    <div className="flex flex-col gap-4 w-[30%] h-full max-lg:w-full  bg-white rounded-lg p-4">
       <span class="text-xl  font-black  text-blue-950">Quick Links</span>
       {MenuList.map((item, i) => {
         return (
