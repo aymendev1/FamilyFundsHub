@@ -11,10 +11,10 @@ function page() {
       <div className=" pb-5">
         <span className="text-3xl  font-black  text-blue-950 ">Balance</span>
       </div>
-      <div className="flex  flex-row  w-full max-lg:flex-col">
-        <div className="flex-1 flex flex-col gap-8 w-[60%] px-2 max-lg:w-full">
+      <div className="flex  flex-row  w-full gap-10 max-lg:flex-col">
+        <div className="flex-1 flex flex-col gap-10 w-full px-2 max-lg:w-full">
           {/* Cards Shows Balance */}
-          <div className="flex flex-row w-full gap-2 ">
+          <div className="flex flex-row w-full gap-10 ">
             <div className="flex-1">
               <TotalBalanceCard />
             </div>
@@ -23,7 +23,7 @@ function page() {
             </div>
           </div>
           {/* Overview Chart */}
-          <div className="w-[92.5%] max-h-[400px] flex flex-row gap-3 ">
+          <div className="w-full max-h-[400px] flex flex-row gap-10 ">
             <CategorySpendCards />
           </div>
         </div>

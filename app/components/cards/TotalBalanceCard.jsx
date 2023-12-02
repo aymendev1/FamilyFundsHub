@@ -2,7 +2,7 @@ import React from "react";
 
 function TotalBalanceCard() {
   return (
-    <div className=" bg-white rounded-lg relative font-[2rem] w-[85%] h-[250px] p-4 flex flex-col gap-4 overflow-hidden max-xl:h-[200px] max-xl:gap-1 max-lg:w-full">
+    <div className=" bg-white rounded-lg relative font-[2rem] w-full h-[250px] p-4 flex flex-col gap-4 overflow-hidden max-xl:h-[200px] max-xl:gap-1 max-lg:w-full">
       {/* Blobs  */}
       <div className="absolute left-[50%] w-full bottom-[25%] ">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">

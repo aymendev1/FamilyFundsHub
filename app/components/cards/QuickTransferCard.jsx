@@ -34,7 +34,7 @@ function QuickTransferCard() {
     console.log({ userID: selectedUser, AmountToSent: AmountToSent });
   };
   return (
-    <div className=" bg-white rounded-lg relative font-[2rem] w-[85%] h-[250px] p-4 flex flex-col gap-3 overflow-hidden max-xl:h-[200px] max-xl:gap-1 max-lg:w-full">
+    <div className=" bg-white rounded-lg relative font-[2rem] w-full h-[250px] p-4 flex flex-col gap-3 overflow-hidden max-xl:h-[200px] max-xl:gap-1 max-lg:w-full">
       <span className="text-xl  font-black  text-blue-950">Quick Transfer</span>
       <div className="flex flex-row gap-1 overflow-scroll overflow-y-hidden scroll-smooth quickTransferImages h-[50px]">
         {FamilyMembers.map((member, index) => {
