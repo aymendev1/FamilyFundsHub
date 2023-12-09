@@ -1,13 +1,11 @@
-'use client'
-import {useState} from "react";
+"use client";
+import { useState } from "react";
 import {
   MdOutlineEmail,
   MdOutlineLocalPhone,
   MdOutlineLocationOn,
 } from "react-icons/md";
-import EditProfilePopup from "../popups/EditProfilePopup";
 function ProfileComponent() {
-  const [OpenPopup,setOpenPopup]=useState(false);
   const FamilyMembers = [
     {
       userID: 1,
@@ -84,10 +82,9 @@ function ProfileComponent() {
                 Member in Azougar's Family
               </span>
             </div>
-            <button onClick={()=>{setOpenPopup(true)}} className="bg-blue-950/80 hover:bg-blue-950 h-10 ease-out duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-base flex flex-row items-center  justify-center">
+            <button className="bg-blue-950/80 hover:bg-blue-950 h-10 ease-out duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-base flex flex-row items-center  justify-center">
               Edit Profile
             </button>
-            {OpenPopup ? <EditProfilePopup setOpenPopup={setOpenPopup} /> :" "}
           </div>
           {/* Profile Details */}
           <div className="flex flex-row justify-between">
@@ -138,7 +135,6 @@ function ProfileComponent() {
         </div>
       </div>
     </div>
-    
   );
 }
 
