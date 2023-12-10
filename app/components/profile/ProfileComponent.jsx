@@ -1,11 +1,14 @@
 "use client";
 import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import {
   MdOutlineEmail,
   MdOutlineLocalPhone,
   MdOutlineLocationOn,
 } from "react-icons/md";
 function ProfileComponent() {
+  const router = useRouter();
+  const PathName = usePathname();
   const FamilyMembers = [
     {
       userID: 1,
@@ -56,6 +59,9 @@ function ProfileComponent() {
       ProfilePicture: "/userProfileTest.jpg",
     },
   ];
+  const handleClickProfile = () => {
+    router.push(`${PathName}/edit`);
+  };
   return (
     <div className="flex-1  flex flex-col gap-3 rounded-lg">
       {/* Cover Image */}
@@ -82,7 +88,10 @@ function ProfileComponent() {
                 Member in Azougar's Family
               </span>
             </div>
-            <button className="bg-blue-950/80 hover:bg-blue-950 h-10 ease-out duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-base flex flex-row items-center  justify-center">
+            <button
+              onClick={handleClickProfile}
+              className="bg-blue-950/80 hover:bg-blue-950 h-10 ease-out duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-base flex flex-row items-center  justify-center"
+            >
               Edit Profile
             </button>
           </div>
