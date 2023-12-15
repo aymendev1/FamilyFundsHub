@@ -1,11 +1,13 @@
 import React from "react";
 import Image from "next/image";
 function UserProfile(props) {
+  const { toggle } = props;
   return (
     <div
       className={`flex gap-5 items-center 
          transition-all duration-300 delay-200
            bg-white rounded-xl p-2
+           max-md:flex-col
       `}
     >
       {/*    Profile Picture */}
@@ -19,8 +21,12 @@ function UserProfile(props) {
         />{" "}
       </div>
       {/* Profile Name */}
-      <div className={`flex flex-col delay-100`}>
-        <span className="text-xl  font-black  text-blue-950 ">
+      <div
+        className={`${
+          toggle ? "max-md:hidden" : " "
+        }  flex flex-col delay-100 max-md:items-center`}
+      >
+        <span className="text-xl max-md:text-center font-black  text-blue-950 ">
           Aymen Azougar
         </span>
         <span className="text-[0.75rem] text-slate-500">test@gmail.com</span>
