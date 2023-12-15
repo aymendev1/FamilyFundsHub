@@ -13,10 +13,10 @@ function page() {
       <div className=" pb-5">
         <span className="text-3xl  font-black  text-blue-950 ">Dashboard</span>
       </div>
-      <div className="flex  flex-row  w-full max-lg:flex-col">
-        <div className="flex-1 flex flex-col gap-8 w-[60%] px-2 max-lg:w-full">
+      <div className="flex  flex-row  w-full max-md:flex-col gap-8 max-lg:gap-5 ">
+        <div className="flex-1 flex flex-col gap-8 max-lg:gap-5 w-[60%] max-lg:w-[70%] max-md:w-full px-2">
           {/* Cards Shows Balance */}
-          <div className="flex flex-row w-full gap-2 ">
+          <div className="flex flex-row w-full gap-2 max-sm:flex-col max-sm:gap-5">
             <div className="flex-1">
               <CreditCard />
             </div>
@@ -25,7 +25,7 @@ function page() {
             </div>
           </div>
           {/* Overview Chart */}
-          <div className="w-[92.5%] max-h-[400px] bg-white rounded-lg flex flex-col gap-3 p-4">
+          <div className="w-[92.5%] max-lg:w-full  max-h-[400px] bg-white rounded-lg flex flex-col gap-3 p-4">
             <div className="flex flex-col gap-1">
               <span className="text-xl  font-black  text-blue-950">
                 Overview
@@ -40,7 +40,7 @@ function page() {
         {/* FamilyChart */}
         <FamilyChartCard />
       </div>
-      <div className="flex bg-white rounded-lg mt-8 flex-col p-4 gap-2  max-lg:flex-col">
+      <div className="flex bg-white rounded-lg mt-8 max-lg:mt-5 flex-col p-4 gap-2  max-lg:flex-col">
         <span className="text-xl  font-black  text-blue-950">
           Latest transactions
         </span>
