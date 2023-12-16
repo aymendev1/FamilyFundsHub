@@ -7,7 +7,7 @@ export default function Example() {
         </span>
       </div>
       <form className=" ">
-        <div className=" flex flex-row gap-10 justify-between">
+        <div className=" flex flex-row max-md:flex-col gap-10 justify-between">
           <div className="p-4 bg-white rounded-lg w-full">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
               Login Credentials

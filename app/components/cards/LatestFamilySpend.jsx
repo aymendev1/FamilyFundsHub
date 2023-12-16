@@ -70,7 +70,7 @@ function LatestFamilySpend() {
     },
   ];
   return (
-    <div className="flex flex-col gap-4 w-[30%] h-fit max-lg:w-fit  bg-white rounded-lg p-4">
+    <div className="flex flex-col gap-4 w-[30%] max-md:w-full h-fit max-lg:w-fit  bg-white rounded-lg p-4">
       <div>
         {" "}
         <span className="text-xl  font-black  text-blue-950">

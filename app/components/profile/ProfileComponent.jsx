@@ -63,7 +63,7 @@ function ProfileComponent() {
     router.push(`${PathName}/edit`);
   };
   return (
-    <div className="w-[70%]  flex flex-col gap-3 rounded-lg">
+    <div className="w-[70%] max-md:w-full flex flex-col gap-3 rounded-lg">
       {/* Cover Image */}
       <img
         src="/defaultCoverImage.jpg"
