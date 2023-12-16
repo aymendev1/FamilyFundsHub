@@ -70,7 +70,7 @@ function LatestFamilySpend() {
     },
   ];
   return (
-    <div className="flex flex-col gap-4 w-[30%] h-fit max-lg:w-full  bg-white rounded-lg p-4">
+    <div className="flex flex-col gap-4 w-[30%] h-fit max-lg:w-fit  bg-white rounded-lg p-4">
       <div>
         {" "}
         <span className="text-xl  font-black  text-blue-950">
@@ -82,7 +82,7 @@ function LatestFamilySpend() {
           return (
             <div
               key={i}
-              className="flex flex-row justify-start gap-5 items-center"
+              className="flex flex-row justify-start gap-5 items-center max-lg:gap-3"
             >
               <img
                 src={item.ProfilePicture}

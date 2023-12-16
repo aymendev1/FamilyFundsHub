@@ -63,7 +63,7 @@ function ProfileComponent() {
     router.push(`${PathName}/edit`);
   };
   return (
-    <div className="flex-1  flex flex-col gap-3 rounded-lg">
+    <div className="w-[70%]  flex flex-col gap-3 rounded-lg">
       {/* Cover Image */}
       <img
         src="/defaultCoverImage.jpg"
@@ -74,42 +74,42 @@ function ProfileComponent() {
           <img
             src="/userProfileTest.jpg"
             alt="Profile Picture"
-            className="rounded-full object-cover h-[160px] w-[160px] absolute bottom-0 left-[10px]"
+            className="rounded-full object-cover h-[160px] w-[160px] max-lg:w-[130px] max-lg:h-[130px] absolute bottom-0 max-lg:bottom-10 left-[10px]"
           />
         </div>
-        <div className="flex flex-col gap-3 w-full  pl-[160px] pr-4">
+        <div className="flex flex-col gap-3 w-full  pl-[160px] max-lg:pl-[0px] pr-4 max-lg:pr-2">
           {/* Profile Name */}
-          <div className="flex flex-row justify-between items-center w-full">
+          <div className="flex flex-row justify-between items-center w-full max-lg:pl-[130px]">
             <div className="flex flex-col gap-2  ">
               <span className="text-2xl  font-black bigText text-blue-950 ">
                 Aymen Azougar
               </span>
-              <span className="text-base font-black text-slate-500">
+              <span className="text-base max-lg:text-sm font-black text-slate-500">
                 Member in Azougar's Family
               </span>
             </div>
             <button
               onClick={handleClickProfile}
-              className="bg-blue-950/80 hover:bg-blue-950 h-10 ease-out duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-base flex flex-row items-center  justify-center"
+              className="bg-blue-950/80 hover:bg-blue-950 h-10 ease-out duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-base max-lg:text-sm flex flex-row items-center  justify-center"
             >
               Edit Profile
             </button>
           </div>
           {/* Profile Details */}
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-row gap-2 items-center">
+          <div className="flex flex-row justify-between w-full gap-2 ">
+            <div className="flex flex-row gap-2 max-lg:gap-1 items-center">
               <MdOutlineLocationOn className="min-w-[20px] h-[20px] text-blue-900 " />
               <span className="text-sm font-black text-blue-950">
                 Warsaw,Poland
               </span>
             </div>
-            <div className="flex flex-row gap-2 items-center">
+            <div className="flex flex-row gap-2 max-lg:gap-1 items-center">
               <MdOutlineEmail className="min-w-[20px] h-[20px] text-blue-900 " />
               <span className="text-sm font-black text-blue-950">
                 test@gmail.com
               </span>
             </div>
-            <div className="flex flex-row gap-2 items-center">
+            <div className="flex flex-row gap-2 max-lg:gap-1 items-center">
               <MdOutlineLocalPhone className="min-w-[20px] h-[20px] text-blue-900 " />
               <span className="text-sm font-black text-blue-950">
                 +48 XXX XXX XXX
