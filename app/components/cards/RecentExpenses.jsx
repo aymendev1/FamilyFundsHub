@@ -1,0 +1,43 @@
+import React from "react";
+import { FaMoneyBills } from "react-icons/fa6";
+function RecentExpenses() {
+  const recentExpenses = [
+    { name: "Food", price: "50" },
+    { name: "Bill", price: "90" },
+    { name: "Transfer to Aymen", price: "50" },
+    { name: "Bim", price: "50" },
+    { name: "Food", price: "50" },
+    { name: "Food", price: "50" },
+    { name: "Food", price: "50" },
+    { name: "Food", price: "50" },
+  ];
+  return (
+    <div className="flex flex-col gap-4 w-full h-full max-lg:w-full  bg-white rounded-lg p-4">
+      <div>
+        <span className="text-xl  font-black  text-blue-950">
+          Recents Expenses
+        </span>
+      </div>
+      <div className="flex flex-col gap-2 overflow-scroll overflow-x-hidden scroll-smooth familyChartCard">
+        {/* Max 8 items */}
+        {recentExpenses.map((item, i) => {
+          return (
+            <div key={i} className="flex flex-row gap-4 items-center ">
+              <div className="w-[40px] h-[40px] rounded-lg bg-blue-100 flex items-center justify-center">
+                <FaMoneyBills className="text-blue-950 h-[20px] w-[20px]" />
+              </div>
+              <div className="flex flex-1 w-fit flex-row justify-between">
+                <span className="text-base ">{item.name}</span>
+                <span className="text-base font-black text-blue-950">
+                  ${item.price}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default RecentExpenses;

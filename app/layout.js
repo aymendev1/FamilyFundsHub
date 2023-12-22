@@ -1,4 +1,3 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
 
 export const metadata = {
@@ -8,8 +7,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="h-full">
-      <body className="h-full">{children}</body>
+    <html lang="en" className="min-h-full">
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }
