@@ -2,8 +2,8 @@ import React from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 function authLayout({ children }) {
   return (
-    <div className="flex h-screen min-w-full flex-1 flex-row max-md:flex-col">
-      <div className="illustration w-2/4 flex items-center justify-center max-md:w-full max-md:h-full max-md:p-10">
+    <div className="flex h-screen min-w-full flex-1 flex-row max-md:flex-col relative">
+      <div className=" relative illustration w-2/4 flex items-center justify-center max-md:w-full max-md:h-full max-md:p-10">
         <div className="flex flex-col w-3/4 h-3/4 max-md:h-fit px-14 py-14 gap-5 max-md:p-5 max-md:gap-2 ">
           <div className="flex flex-col gap-2 bigText max-md:gap-1">
             <span className="text-7xl font-bold text-slate-50 flex items-center gap-2 max-lg:text-5xl max-md:text-3xl">
@@ -30,7 +30,7 @@ function authLayout({ children }) {
           </div>
         </div>
       </div>
-      <div className="w-2/4 px-20 py-16 flex flex-col gap-5 md:px-14 md:py-18 max-md:w-full">
+      <div className="relative w-2/4 px-20 py-14 flex flex-col gap-3 md:px-14 md:py-12 max-md:w-full">
         {children}
       </div>
     </div>
