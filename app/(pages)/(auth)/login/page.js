@@ -3,13 +3,12 @@ import { useState } from "react";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { TbFaceIdError } from "react-icons/tb";
-import { useRouter } from "next/navigation";
 import { ScaleLoader } from "react-spinners";
+import { FcGoogle } from "react-icons/fc";
 function page() {
-  const [data, setData] = useState({ email: "", password: "" });
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [data, setData] = useState({ email: "", password: "" });
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -18,8 +17,6 @@ function page() {
     if (login.status !== 200) {
       setLoading(false);
       setError(true);
-    } else {
-      router.push("/dashboard");
     }
   };
   const handleLoginGoogle = async (e) => {
@@ -27,12 +24,10 @@ function page() {
     setLoading(true);
     setError(false);
     try {
-      const login = await signIn("google");
+      const login = await signIn("google", { redirect: false });
       if (login.status !== 200) {
         setLoading(false);
         setError(true);
-      } else {
-        router.push("/dashboard");
       }
     } catch (e) {
       console.log(e);
@@ -54,7 +49,7 @@ function page() {
       </div>
       {/* Form */}
       <form
-        className="space-y-6 xl:w-9/12 py-6 lg:w-full md:w-full ms:w-full "
+        className="space-y-6  py-6 lg:w-full md:w-full ms:w-full "
         onSubmit={handleLogin}
         method="POST"
       >
@@ -126,25 +121,31 @@ function page() {
           >
             Sign in
           </button>
-          <div className="py-6 flex flex-row items-center w-full justify-between ">
-            <hr className="w-2/5" />
-            <span className="text-base text-gray-600"> or</span>
-            <hr className="w-2/5" />
-          </div>
-          <button
-            onClick={handleLoginGoogle}
-            className="flex w-full justify-center gap-2 items-center rounded-md ring-1 ring-inset ring-gray-300 bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-blue-950 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            <Image
-              src="/google.png"
-              alt="Aymen's Projects"
-              width="20"
-              height="20"
-            />
-            Sign in with Google
-          </button>
         </div>
       </form>
+      <div className=" flex flex-row items-center w-full justify-between ">
+        <hr className="w-2/5" />
+        <span className="text-base text-gray-600"> or</span>
+        <hr className="w-2/5" />
+      </div>
+      <button
+        onClick={handleLoginGoogle}
+        className="flex w-full justify-center gap-2 items-center rounded-md ring-1 ring-inset ring-gray-300 bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-blue-950 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      >
+        <FcGoogle className="h-7 w-7" />
+        Sign in or Register with Google
+      </button>
+      <div className=" flex flex-col items-center w-full justify-between ">
+        <span className="text-base text-slate-500">
+          You don't have an account yet ?{" "}
+        </span>
+        <a
+          href="/register"
+          className="text-base font-semibold text-blue-600 hover:text-indigo-500"
+        >
+          Register now
+        </a>
+      </div>
       {loading ? (
         <div className="static">
           <div className="absolute inset-0 backdrop-blur-sm flex justify-center items-center">

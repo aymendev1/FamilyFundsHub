@@ -141,9 +141,7 @@ export default function LatestTransactionsTable() {
       date: "2022-10-20",
     },
   ];
-  useEffect(() => {
-    console.log("state", selectedRows);
-  }, [selectedRows]);
+  useEffect(() => {}, [selectedRows]);
   useEffect(() => {
     const timeout = setTimeout(() => {
       setLoading(false);

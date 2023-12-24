@@ -6,6 +6,7 @@ import StatsCardEarning from "@/app/components/cards/StatsCardEarning";
 import OverviewChartDashboard from "@/app/components/charts/overviewChartDashboard";
 import FamilyChartCard from "@/app/components/cards/FamilyChartCard";
 import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
+
 function page() {
   return (
     <>

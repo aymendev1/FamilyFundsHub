@@ -1,6 +1,13 @@
+"use client";
 import React from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
+import { Suspense } from "react";
+import { useSession } from "next-auth/react";
 function authLayout({ children }) {
+  const { status } = useSession({});
+  if (status === "authenticated") {
+    window.location.replace("/dashboard");
+  }
   return (
     <div className="flex h-screen min-w-full flex-1 flex-row max-md:flex-col relative">
       <div className=" relative illustration w-2/4 flex items-center justify-center max-md:w-full max-md:h-full max-md:p-10">
@@ -31,7 +38,7 @@ function authLayout({ children }) {
         </div>
       </div>
       <div className="relative w-2/4 px-20 py-14 flex flex-col gap-3 md:px-14 md:py-12 max-md:w-full">
-        {children}
+        <Suspense fallback={null}>{children}</Suspense>
       </div>
     </div>
   );

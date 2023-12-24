@@ -37,7 +37,7 @@ model expenses {
   Status            Int?
   Description       String?           @db.VarChar(255)
   date_updated      DateTime          @default(now()) @db.DateTime(0)
-  users             users             @relation(fields: [UserID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "expenses_ibfk_1")
+  users             users             @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expenses_ibfk_1")
   expensecategories expensecategories @relation(fields: [CategoryID], references: [CategoryID], onDelete: NoAction, onUpdate: NoAction, map: "expenses_ibfk_2")
 
   @@index([CategoryID], map: "CategoryID")
@@ -63,7 +63,7 @@ model income {
   Date_executed DateTime? @default(now()) @db.DateTime(0)
   Status        String?   @db.VarChar(255)
   Description   String?   @db.VarChar(255)
-  users         users     @relation(fields: [UserID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "income_ibfk_1")
+  users         users     @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "income_ibfk_1")
 
   @@index([UserID], map: "UserID")
 }
@@ -93,27 +93,27 @@ model savingshistory {
   Status           String?   @db.VarChar(255)
   Description      String?   @db.VarChar(255)
   savings          savings   @relation(fields: [SavingID], references: [SavingID], onDelete: NoAction, onUpdate: NoAction, map: "savingshistory_ibfk_1")
-  users            users     @relation(fields: [UserID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "savingshistory_ibfk_2")
+  users            users     @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "savingshistory_ibfk_2")
 
   @@index([SavingID], map: "SavingID")
   @@index([UserID], map: "UserID")
 }
 
 model users {
-  UserID         Int              @id @default(autoincrement())
-  Username       String           @unique @db.VarChar(255)
-  Email          String           @unique @db.VarChar(255)
-  Password       String           @db.VarChar(255)
-  Bio            String?          @db.VarChar(255)
-  Role           Int
-  FamilyID       Int?
+  id             Int              @id @default(autoincrement())
+  username       String           @unique @db.VarChar(255)
+  email          String           @unique @db.VarChar(255)
+  password       String           @db.VarChar(255)
+  bio            String?          @db.VarChar(255)
+  role           Int
+  familyID       Int?
   date_created   DateTime?        @default(now()) @db.DateTime(0)
   date_updated   DateTime?        @default(now()) @db.DateTime(0)
-  Full_Name      String?          @map("Full Name") @db.Text
+  name           String?          @db.Text
   expenses       expenses[]
   income         income[]
   savingshistory savingshistory[]
-  family         family?          @relation(fields: [FamilyID], references: [FamilyID], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+  family         family?          @relation(fields: [familyID], references: [FamilyID], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
 
-  @@index([FamilyID], map: "FamilyID")
+  @@index([familyID], map: "FamilyID")
 }

@@ -21,10 +21,10 @@ export async function POST(req) {
       where: {
         OR: [
           {
-            Email: email,
+            email: email,
           },
           {
-            Username: username,
+            username: username,
           },
         ],
       },
@@ -45,11 +45,11 @@ export async function POST(req) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.users.create({
       data: {
-        Full_Name: name,
-        Email: email,
-        Password: hashedPassword,
-        Username: username,
-        Role: role,
+        name: name,
+        email: email,
+        password: hashedPassword,
+        username: username,
+        role: role,
       },
     });
     return NextResponse.json(user, { status: 200 });

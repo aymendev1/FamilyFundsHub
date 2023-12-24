@@ -30,7 +30,7 @@ export const authOptions = {
         }
         //Check if email exists
         const user = await prisma.users.findUnique({
-          where: { Email: credentials.email },
+          where: { email: credentials.email },
         });
         // In case User not found
         if (!user) {
@@ -40,7 +40,7 @@ export const authOptions = {
         // If user is found let's check the password
         const passwordMatch = await bcrypt.compare(
           credentials.password,
-          user.Password
+          user.password
         );
         // In case password does not match
         if (!passwordMatch) {
@@ -53,23 +53,91 @@ export const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {},
+      },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
+
   session: {
     strategy: "jwt",
+    // Seconds - How long until an idle session expires and is no longer valid.
+    maxAge: 1 * 24 * 60 * 60, // 1 day
   },
-  pages: {
-    signIn: "/login",
-  },
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log(user, account, profile, email, credentials);
-      return true;
+  events: {
+    async signIn({ user, account, profile }) {
+      if (account.provider === "google") {
+        //Let's check if user already exists
+        const userExists = await prisma.users.findUnique({
+          where: { email: profile.email },
+        });
+        // In case User not found, we create a new user
+        if (!userExists) {
+          // We use ProfileID as a default password as it's required in the DB model
+          const hashedPassword = await bcrypt.hash(profile.sub, 10);
+          const newUser = await prisma.users.create({
+            data: {
+              name: profile.name,
+              email: profile.email,
+              password: hashedPassword,
+              username: profile.sub,
+              role: 1,
+            },
+          });
+          // we return user
+          return newUser;
+        }
+        // In case user exists we return user
+        return userExists;
+      }
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
-  adapter: PrismaAdapter(prisma),
-  debug: process.env.NODE_ENV === "developement",
+  callbacks: {
+    async jwt({ token, user, account, profile }) {
+      // In case of SignIn using Credentials
+      if (user) {
+        // Passing necessary UserDetails into Token
+        return {
+          ...token,
+          id: user.id,
+          familyId: user.familyID,
+          role: user.role,
+        };
+      }
+      // In Case SignIn with Google
+      else if (
+        token?.picture?.includes("google") ||
+        token?.email?.includes("gmail")
+      ) {
+        // We search for user in DB
+        const userExists = await prisma.users.findUnique({
+          where: { email: token.email },
+        });
+        return {
+          ...token,
+          id: userExists.id,
+          familyId: userExists.familyID,
+          role: userExists.role,
+        };
+      }
+      return token;
+    },
+    async session({ token, user, session }) {
+      // Passing necessary UserDetails into Session
+
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          familyId: token.familyID,
+          role: token.role,
+        },
+      };
+    },
+  },
+  /* debug: process.env.NODE_ENV === "development", */
 };
 
 const handler = NextAuth(authOptions);

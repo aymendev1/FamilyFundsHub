@@ -11,6 +11,7 @@ import {
   MdSettings,
   MdHome,
 } from "react-icons/md";
+import { signOut } from "next-auth/react";
 function sidebarData(props) {
   const { toggle } = props;
   const Data = [
@@ -21,6 +22,9 @@ function sidebarData(props) {
     { icon: FaUsers, text: "Profile", link: "/profile" },
     { icon: MdSettings, text: "Settings", link: "/settings" },
   ];
+  const handleLogout = () => {
+    signOut();
+  };
   return (
     <>
       <div className="flex-1 w-full flex flex-col :items-center">
@@ -45,16 +49,18 @@ function sidebarData(props) {
         })}
       </div>
       {/* Logout button */}
-      <div className=" flex items-center mt-2 p-4 gap-2 h-[3.5rem] rounded-lg cursor-pointer text-blue-950 hover:bg-blue-400 hover:text-white transition-all duration-300">
+      <div
+        onClick={handleLogout}
+        className=" flex items-center mt-2 p-4 gap-2 h-[3.5rem] rounded-lg cursor-pointer text-blue-950 hover:bg-blue-400 hover:text-white transition-all duration-300"
+      >
         <FaArrowRightFromBracket className="min-w-[25px] h-[25px] " />
-        <Link
-          href="/logout"
+        <span
           className={`${
             toggle ? "max-md:hidden" : "max-md:block"
           } font-medium `}
         >
           Log out
-        </Link>
+        </span>
       </div>
     </>
   );
