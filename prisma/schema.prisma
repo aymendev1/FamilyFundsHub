@@ -8,15 +8,15 @@ datasource db {
 }
 
 model budget {
-  BudgetID      Int       @id @default(autoincrement())
-  FamilyID      Int
-  Total_income  Float?    @default(0) @db.Float
-  Total_expense Float?    @default(0) @db.Float
+  id            Int       @id @default(autoincrement())
+  familyID      Int       @unique
+  total_income  Float?    @default(0) @db.Float
+  total_expense Float?    @default(0) @db.Float
   date_created  DateTime? @default(now()) @db.DateTime(0)
   date_updated  DateTime? @default(now()) @db.DateTime(0)
-  family        family    @relation(fields: [FamilyID], references: [FamilyID], onDelete: NoAction, onUpdate: NoAction, map: "budget_ibfk_1")
+  family        family    @relation(fields: [familyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "budget_ibfk_1")
 
-  @@index([FamilyID], map: "FamilyID")
+  @@index([familyID], map: "FamilyID")
 }
 
 model expensecategories {
@@ -45,8 +45,8 @@ model expenses {
 }
 
 model family {
-  FamilyID     Int       @id @default(autoincrement())
-  FamilyName   String    @db.VarChar(255)
+  id           Int       @id @default(autoincrement())
+  familyName   String    @db.VarChar(255)
   date_created DateTime? @default(now()) @db.DateTime(0)
   date_updated DateTime? @default(now()) @db.DateTime(0)
   budget       budget[]
@@ -78,7 +78,7 @@ model savings {
   date_updated   DateTime?        @default(now()) @db.DateTime(0)
   Status         String?          @db.VarChar(255)
   Description    String?          @db.VarChar(255)
-  family         family           @relation(fields: [FamilyID], references: [FamilyID], onDelete: NoAction, onUpdate: NoAction, map: "savings_ibfk_1")
+  family         family           @relation(fields: [FamilyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "savings_ibfk_1")
   savingshistory savingshistory[]
 
   @@index([FamilyID], map: "FamilyID")
@@ -113,7 +113,7 @@ model users {
   expenses       expenses[]
   income         income[]
   savingshistory savingshistory[]
-  family         family?          @relation(fields: [familyID], references: [FamilyID], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+  family         family?          @relation(fields: [familyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
 
   @@index([familyID], map: "FamilyID")
 }

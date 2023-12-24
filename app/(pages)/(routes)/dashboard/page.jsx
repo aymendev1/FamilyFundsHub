@@ -1,13 +1,19 @@
 "use client";
 
-import React from "react";
+import { useEffect } from "react";
 import CreditCard from "@/app/components/cards/CreditCard";
 import StatsCardEarning from "@/app/components/cards/StatsCardEarning";
 import OverviewChartDashboard from "@/app/components/charts/overviewChartDashboard";
 import FamilyChartCard from "@/app/components/cards/FamilyChartCard";
 import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
-
+import { useSelector, useDispatch } from "react-redux";
+import { fetchDataFromDB } from "@/redux/slices/userSlice";
 function page() {
+  const data = useSelector((state) => state.items);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchDataFromDB());
+  }, [dispatch]);
   return (
     <>
       {/* Page Title */}
