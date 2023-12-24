@@ -36,7 +36,7 @@ function page() {
     }).then(async (res) => {
       setLoading(false);
       if (res.status === 200) {
-        // Id registred correctly , we sign teh user in
+        // If registered correctly , we sign the user in
         const login = await signIn("credentials", {
           ...{ email: email, password: password },
           redirect: false,

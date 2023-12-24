@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function POST(req) {
+async function RegisterUser(req) {
   const body = await req.json();
   const { name, email, password, username, role } = body;
   if (!name || !email || !password || !username || !role) {
@@ -65,3 +65,4 @@ export async function POST(req) {
     );
   }
 }
+export { RegisterUser as POST };
