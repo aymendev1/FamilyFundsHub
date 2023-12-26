@@ -19,6 +19,9 @@ async function getUser() {
           email: true,
           role: true,
           familyID: true,
+          name: true,
+          profilePicture: true,
+          balance: true,
         },
       });
       const familyBudget = await prisma.budget.findUnique({
@@ -29,9 +32,49 @@ async function getUser() {
         where: { id: user.familyID },
         select: { id: true, familyName: true },
       });
+      const familyMembers = await prisma.users.findMany({
+        where: { familyID: user.familyID },
+        select: { id: true, name: true, profilePicture: true },
+      });
+      // Get the current date
+      const currentDate = new Date();
+      // Get the current month and year
+      const currentMonth = currentDate.getMonth() + 1; // Months are zero-based, so we add 1
+      const currentYear = currentDate.getFullYear();
+      // Create a formatted date string with day fixed at 01
+      const formattedDate = `${currentYear}/${currentMonth
+        .toString()
+        .padStart(2, "0")}/01`;
+      const userBudget = { incomeThisMonth: 0, ExpenseThisMonth: 0 };
+      const userIncome = await prisma.income.findMany({
+        where: {
+          AND: [
+            { UserID: user.id },
+            { Date_created: { gte: new Date(formattedDate) } },
+          ],
+        },
+        select: { Total: true },
+      });
+      // We sum up in case of multiple results
+      userIncome.map((income) => {
+        userBudget.incomeThisMonth += Number(income.Total);
+      });
+      const userExpense = await prisma.expenses.findMany({
+        where: {
+          AND: [
+            { UserID: user.id },
+            { Date_created: { gte: new Date(formattedDate) } },
+          ],
+        },
+        select: { Total: true },
+      });
+      // We sum up in case of multiple results
+      userExpense.map((expense) => {
+        userBudget.ExpenseThisMonth += Number(expense.Total);
+      });
 
       return NextResponse.json(
-        { user, familyBudget, familyDetails },
+        { user, familyBudget, familyMembers, familyDetails, userBudget },
         {
           status: 200,
         }
