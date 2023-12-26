@@ -82,6 +82,7 @@ export const authOptions = {
               email: profile.email,
               password: hashedPassword,
               username: profile.sub,
+              profilePicture: profile.picture,
               role: 1,
             },
           });
@@ -137,7 +138,7 @@ export const authOptions = {
       };
     },
   },
-  /* debug: process.env.NODE_ENV === "development", */
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);
