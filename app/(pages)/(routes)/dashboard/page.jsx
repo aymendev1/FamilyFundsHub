@@ -1,20 +1,40 @@
 "use client";
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CreditCard from "@/app/components/cards/CreditCard";
 import StatsCardEarning from "@/app/components/cards/StatsCardEarning";
 import OverviewChartDashboard from "@/app/components/charts/overviewChartDashboard";
 import FamilyChartCard from "@/app/components/cards/FamilyChartCard";
 import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
+import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchDataFromDB } from "@/redux/slices/userSlice";
+
 function page() {
-  const data = useSelector((state) => state.items);
+  const { items, loading, error } = useSelector((state) => state.userData);
+
+  const [monthlyStats, setMonthlyStats] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchDataFromDB());
   }, [dispatch]);
-  return (
+  // We import Monthly Stats and Latest Items From API
+  const fetchData = async () => {
+    try {
+      // Monthly Stats
+      await fetch("/api/income/stats", { method: "GET" }).then(async (res) => {
+        const data = await res.json();
+        setMonthlyStats(data);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  return loading ? (
+    <ComponentLoader />
+  ) : (
     <>
       {/* Page Title */}
       <div className=" pb-5">
@@ -25,10 +45,15 @@ function page() {
           {/* Cards Shows Balance */}
           <div className="flex flex-row w-full gap-2 max-sm:flex-col max-sm:gap-5">
             <div className="flex-1">
-              <CreditCard />
+              <CreditCard
+                data={{
+                  userDetails: items?.user,
+                  familyDetails: items?.familyDetails,
+                }}
+              />
             </div>
             <div className="flex-1 flex gap-2 justify-between max-xl:h-[200px] max-lg:w-full flex-col">
-              <StatsCardEarning />
+              <StatsCardEarning data={items?.userBudget} />
             </div>
           </div>
           {/* Overview Chart */}
@@ -40,7 +65,7 @@ function page() {
               <span className="text-md  text-slate-700">Monthly Earning</span>
             </div>
             <div className="w-[full] h-[300px] ">
-              <OverviewChartDashboard />
+              <OverviewChartDashboard data={monthlyStats} />
             </div>
           </div>
         </div>

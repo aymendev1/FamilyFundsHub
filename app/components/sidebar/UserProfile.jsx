@@ -1,8 +1,19 @@
-import React from "react";
-import Image from "next/image";
+"use client";
+import { useEffect } from "react";
+import SidebarProfileLoader from "../loadings/SidebarProfileLoader";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchDataFromDB } from "@/redux/slices/userSlice";
 function UserProfile(props) {
+  const { items, loading, error } = useSelector((state) => state.userData);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchDataFromDB());
+  }, [dispatch]);
   const { toggle } = props;
-  return (
+
+  return loading ? (
+    <SidebarProfileLoader />
+  ) : (
     <div
       className={`flex gap-5 items-center 
          transition-all duration-300 delay-200
@@ -10,15 +21,17 @@ function UserProfile(props) {
            max-md:flex-col
       `}
     >
-      {/*    Profile Picture */}
-      <div className="min-w-[3.5rem] h-[3.5rem]">
-        <Image
-          src="/userProfileTest.jpg"
+      {/*Profile Picture */}
+      <div className="min-w-[4rem] h-[4rem]">
+        <img
+          src={
+            items?.user?.profilePicture
+              ? items.user.profilePicture
+              : "/userProfileTest.jpg"
+          }
           alt="Profile Picture"
-          width="60"
-          height="60"
           className="w-full h-full rounded-full object-cover"
-        />{" "}
+        />
       </div>
       {/* Profile Name */}
       <div
@@ -27,9 +40,12 @@ function UserProfile(props) {
         }  flex flex-col delay-100 max-md:items-center`}
       >
         <span className="text-xl max-md:text-center font-black  text-blue-950 ">
-          Aymen Azougar
+          {items?.user?.name}
         </span>
-        <span className="text-[0.75rem] text-slate-500">test@gmail.com</span>
+        <span className="text-[0.75rem] text-slate-500">
+          {" "}
+          {items?.user?.email}
+        </span>
       </div>
     </div>
   );

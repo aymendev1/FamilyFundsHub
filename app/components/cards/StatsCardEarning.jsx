@@ -1,6 +1,7 @@
 import React from "react";
 import { BanknotesIcon, ArrowTrendingUpIcon } from "@heroicons/react/24/solid";
 function StatsCardEarning(props) {
+  const { data } = props;
   return (
     <>
       {" "}
@@ -11,9 +12,11 @@ function StatsCardEarning(props) {
         </div>
         {/* Text */}
         <div className="flex flex-col gap-1 max-xl:gap-1 justify-center">
-          <span className="text-md font-semibold text-emerald-950">Income</span>
+          <span className="text-md font-semibold text-emerald-950">
+            Income This Month
+          </span>
           <span className="text-2xl text-emerald-950 font-black bigText ">
-            $ 11,5K
+            $ {Number(data?.incomeThisMonth).toLocaleString()}
           </span>
         </div>
       </div>
@@ -24,9 +27,11 @@ function StatsCardEarning(props) {
         </div>
         {/* Text */}
         <div className="flex flex-col gap-1  xl:gap-1 justify-center">
-          <span className="text-md font-semibold text-violet-950">Earning</span>
+          <span className="text-md font-semibold text-violet-950">
+            Earning This Month
+          </span>
           <span className="text-2xl text-violet-950 font-black bigText ">
-            $ 9,5K
+            $ {Number(data?.ExpenseThisMonth).toLocaleString()}
           </span>
         </div>
       </div>

@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -110,10 +111,21 @@ model users {
   date_created   DateTime?        @default(now()) @db.DateTime(0)
   date_updated   DateTime?        @default(now()) @db.DateTime(0)
   name           String?          @db.Text
+  profilePicture String           @db.Text
+  balance        Float            @default(0) @db.Float
   expenses       expenses[]
   income         income[]
   savingshistory savingshistory[]
   family         family?          @relation(fields: [familyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
 
   @@index([familyID], map: "FamilyID")
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view monthly_income_view {
+  UserID        Int
+  month         String?  @db.VarChar(7)
+  monthlyIncome Decimal? @db.Decimal(32, 0)
+
+  @@ignore
 }
