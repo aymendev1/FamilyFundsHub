@@ -8,12 +8,64 @@ import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsT
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchDataFromDB } from "@/redux/slices/userSlice";
-
+import { BsBoxArrowUpRight } from "react-icons/bs";
 function page() {
   const { items, loading, error } = useSelector((state) => state.userData);
-
   const [monthlyStats, setMonthlyStats] = useState([]);
+  const [LatestTransactions, setLatestTransactions] = useState([]);
   const dispatch = useDispatch();
+  // Table's Column
+  const columns = [
+    {
+      name: "Member",
+      selector: (row) => (
+        <div className="flex flex-row gap-2 items-center">
+          <img
+            src={row.profilePicture || "/fatherDefaultPP.jpg"}
+            className="rounded-lg h-10 w-10
+             object-cover"
+            alt={`${row.name} Profile Picture`}
+          />
+          <span className="font-black">{row.name}</span>
+        </div>
+      ),
+    },
+    {
+      name: "Description",
+      selector: (row) => row.Description,
+    },
+    {
+      name: "Category",
+      selector: (row) => row.category,
+    },
+    {
+      name: "Total",
+      selector: (row) => "$ " + String(row.Total),
+    },
+    {
+      name: "Date",
+      selector: (row) =>
+        new Date(row.Date_created).toLocaleDateString("default", {
+          month: "long",
+          year: "numeric",
+          day: "2-digit",
+        }),
+    },
+    {
+      name: "",
+      selector: (row) => (
+        <button
+          className="bg-blue-950 hover:bg-blue-600 ease-out duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-sm flex flex-row items-center gap-2 justify-center"
+          onClick={() => {
+            window.open(`/transactions/${row.ExpenseID}`, "_blank");
+          }}
+        >
+          <span className="flex-1">View More</span>
+          <BsBoxArrowUpRight className="min-w-[15px] h-[15px] " />
+        </button>
+      ),
+    },
+  ];
   useEffect(() => {
     dispatch(fetchDataFromDB());
   }, [dispatch]);
@@ -24,6 +76,10 @@ function page() {
       await fetch("/api/income/stats", { method: "GET" }).then(async (res) => {
         const data = await res.json();
         setMonthlyStats(data);
+      });
+      await fetch("/api/expenses/", { method: "GET" }).then(async (res) => {
+        const data = await res.json();
+        setLatestTransactions(data);
       });
     } catch (e) {
       console.log(e);
@@ -79,7 +135,10 @@ function page() {
         <span className="text-md text-slate-700">
           Your latest transactions{" "}
         </span>
-        <LatestTransactionsTable />
+        <LatestTransactionsTable
+          columns={columns}
+          data={LatestTransactions?.Expenses}
+        />
       </div>
     </>
   );
