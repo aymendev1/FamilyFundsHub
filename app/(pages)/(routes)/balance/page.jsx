@@ -1,11 +1,24 @@
-import React from "react";
+"use client";
+import { useEffect, useState } from "react";
+import ComponentLoader from "@/app/components/loadings/ComponentLoader";
+
 import TotalBalanceCard from "@/app/components/cards/TotalBalanceCard";
 import QuickTransferCard from "@/app/components/cards/QuickTransferCard";
 import CategorySpendCards from "@/app/components/cards/CategorySpendCards";
 import ActionMenu from "@/app/components/Menus/ActionMenu";
 import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchDataFromDB } from "@/redux/slices/userSlice";
+
 function page() {
-  return (
+  const dispatch = useDispatch();
+  const { items, loading, error } = useSelector((state) => state.userData);
+  useEffect(() => {
+    dispatch(fetchDataFromDB());
+  }, [dispatch]);
+  return loading ? (
+    <ComponentLoader />
+  ) : (
     <>
       {/* Page Title */}
       <div className=" pb-5">
@@ -16,13 +29,12 @@ function page() {
           {/* Cards Shows Balance */}
           <div className="flex flex-row w-full gap-8 max-lg:gap-6 max-md:gap-5 ">
             <div className="flex-1">
-              <TotalBalanceCard />
+              <TotalBalanceCard data={items.userBudget} />
             </div>
             <div className="flex-1 flex gap-2 justify-between max-xl:h-[200px] max-lg:w-full flex-col">
               <QuickTransferCard />
             </div>
           </div>
-
           <div className="w-full max-h-[400px] flex flex-row gap-8 max-lg:gap-6 max-md:gap-5 ">
             <CategorySpendCards />
           </div>
