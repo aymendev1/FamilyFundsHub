@@ -4,19 +4,21 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/(auth)/auth/[...nextauth]/route";
 const prisma = new PrismaClient();
 
-async function getExpenses() {
+async function getCategories() {
   // Check if User is authenticated and eligible
   const session = await getServerSession(authOptions);
   if (session) {
     try {
       // We export the Stats from DB based on the UserID from the session :
-      const Expenses = await prisma.$queryRaw`
-SELECT expenses.ExpenseID, expenses.Description,expenses.Date_created,expenses.Total,expensecategories.CategoryName AS category , users.name,users.profilePicture FROM expenses INNER JOIN expensecategories ON expenses.CategoryID = expensecategories.CategoryID INNER JOIN users ON expenses.UserID = ${Number(
-        session.user.id
-      )} WHERE users.id=${Number(session.user.id)}
+      const Categories = await prisma.$queryRaw`
+SELECT
+    expenses.UserID, expensecategories.CategoryName, SUM(CASE WHEN expenses.CategoryID = expensecategories.CategoryID THEN expenses.Total ELSE 0 END) AS TotalSpent FROM expenses JOIN expensecategories  ON expenses.CategoryID = expensecategories.CategoryID WHERE expenses.UserID = ${Number(
+      session.user.id
+    )} GROUP BY expenses.UserID, expensecategories.CategoryName ORDER BY
+    TotalSpent DESC;
   `;
       return NextResponse.json(
-        { Expenses },
+        { Categories },
         {
           status: 200,
         }
@@ -44,4 +46,4 @@ SELECT expenses.ExpenseID, expenses.Description,expenses.Date_created,expenses.T
     }
   );
 }
-export { getExpenses as GET };
+export { getCategories as GET };
