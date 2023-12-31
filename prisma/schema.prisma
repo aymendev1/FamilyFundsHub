@@ -34,8 +34,6 @@ model expenses {
   CategoryID        Int
   Total             Int?              @default(0)
   Date_created      DateTime?         @default(now()) @db.DateTime(0)
-  Date_executed     DateTime?         @default(now()) @db.DateTime(0)
-  Status            Int?
   Description       String?           @db.VarChar(255)
   date_updated      DateTime          @default(now()) @db.DateTime(0)
   users             users             @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expenses_ibfk_1")
@@ -56,15 +54,13 @@ model family {
 }
 
 model income {
-  IncomeID      Int       @id @default(autoincrement())
-  FamilyID      Int
-  UserID        Int
-  Total         Int?      @default(0)
-  Date_created  DateTime? @default(now()) @db.DateTime(0)
-  Date_executed DateTime? @default(now()) @db.DateTime(0)
-  Status        String?   @db.VarChar(255)
-  Description   String?   @db.VarChar(255)
-  users         users     @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "income_ibfk_1")
+  IncomeID     Int       @id @default(autoincrement())
+  FamilyID     Int
+  UserID       Int
+  Total        Int?      @default(0)
+  Date_created DateTime? @default(now()) @db.DateTime(0)
+  Description  String?   @db.VarChar(255)
+  users        users     @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "income_ibfk_1")
 
   @@index([UserID], map: "UserID")
 }
@@ -111,6 +107,7 @@ model users {
   date_created   DateTime?        @default(now()) @db.DateTime(0)
   date_updated   DateTime?        @default(now()) @db.DateTime(0)
   name           String?          @db.Text
+  address        String?          @db.Text
   profilePicture String           @db.Text
   balance        Float            @default(0) @db.Float
   expenses       expenses[]

@@ -27,7 +27,7 @@ function overviewChartDashboard(props) {
     datasets: [
       {
         label: "Spent this month",
-        data: data?.income,
+        data: data?.stats,
         // you can set indiviual colors for each bar
         backgroundColor: ["#17255480"],
         borderWidth: 1,
