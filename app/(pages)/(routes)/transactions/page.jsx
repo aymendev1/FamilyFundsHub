@@ -4,6 +4,7 @@ import OverviewChartDashboard from "@/app/components/charts/overviewChartDashboa
 import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { BsBoxArrowUpRight } from "react-icons/bs";
+
 function page() {
   const [Loading, setLoading] = useState();
   const [monthlyStats, setMonthlyStats] = useState([]);

@@ -17,7 +17,7 @@ function page({ params }) {
     <ComponentLoader />
   ) : (
     <>
-      {/* Page Title */}{" "}
+      {/* Page Title */}
       <span className="text-3xl  font-black  text-blue-950 ">
         Transaction Details
       </span>

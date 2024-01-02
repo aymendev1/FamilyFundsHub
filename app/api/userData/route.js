@@ -36,6 +36,9 @@ async function getUser() {
         where: { familyID: user.familyID },
         select: { id: true, name: true, profilePicture: true },
       });
+      const ExpensesCategories = await prisma.expensecategories.findMany({
+        select: { CategoryID: true, CategoryName: true },
+      });
       // Get the current date
       const currentDate = new Date();
       // Get the current month and year
@@ -78,7 +81,14 @@ async function getUser() {
       });
 
       return NextResponse.json(
-        { user, familyBudget, familyMembers, familyDetails, userBudget },
+        {
+          user,
+          familyBudget,
+          familyMembers,
+          familyDetails,
+          userBudget,
+          ExpensesCategories,
+        },
         {
           status: 200,
         }
