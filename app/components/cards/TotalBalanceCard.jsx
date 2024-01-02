@@ -31,22 +31,19 @@ function TotalBalanceCard(props) {
         Total Balance
       </span>
       <span className="text-3xl  max-sm:text-2xl font-black  text-blue-800 bigText">
-        $
-        {Number(
-          Number(data?.incomeThisMonth) - Number(data?.ExpenseThisMonth)
-        ).toLocaleString()}
+        ${parseFloat(data?.UserBudget).toLocaleString()}
       </span>
       <div className="flex flex-row gap-2 w-full justify-between">
         <div className="flex flex-col gap-2 max-lg:gap-1">
           <span className="text-sm  text-slate-700">Income This Month</span>
           <span className="text-base text-emerald-700 font-black bigText ">
-            ${Number(data?.incomeThisMonth).toLocaleString()}
+            ${parseFloat(data?.incomeThisMonth).toLocaleString()}
           </span>
         </div>
         <div className="flex flex-col gap-2 max-lg:gap-1">
           <span className="text-sm  text-slate-700">Spent This month</span>
           <span className="text-base text-violet-800 font-black bigText ">
-            ${Number(data?.ExpenseThisMonth).toLocaleString()}
+            ${parseFloat(data?.ExpenseThisMonth).toLocaleString()}
           </span>
         </div>
       </div>

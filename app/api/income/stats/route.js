@@ -10,7 +10,7 @@ async function getStats() {
   if (session) {
     try {
       // We export the Stats from DB based on the UserID from the session :
-      const Stats = await prisma.$queryRaw`
+      const Income = await prisma.$queryRaw`
     SELECT
 UserID,
 DATE_FORMAT(Date_created, '%Y-%m') AS month,
@@ -22,8 +22,8 @@ GROUP BY
 UserID, month
   `;
       const Months = [];
-      const income = [];
-      Stats.map((item) => {
+      const stats = [];
+      Income.map((item) => {
         // We convert Date to text MM-YYYY format
         const date = new Date(item.month);
         const month = date.toLocaleString("default", {
@@ -31,11 +31,11 @@ UserID, month
           year: "numeric",
         });
         Months.push(month);
-        income.push(item.monthly_income);
+        stats.push(item.monthly_income);
       });
 
       return NextResponse.json(
-        { Months, income },
+        { Months, stats },
         {
           status: 200,
         }
