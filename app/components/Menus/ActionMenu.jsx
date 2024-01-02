@@ -5,7 +5,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 function ActionMenu() {
   const router = useRouter();
   const MenuList = [
-    { title: "View 01", link: "/link01" },
+    { title: "Add Expense", link: "/transactions/new" },
     { title: "View 02", link: "/link02" },
     { title: "View 03", link: "/link02" },
     { title: "View 04", link: "/link02" },
