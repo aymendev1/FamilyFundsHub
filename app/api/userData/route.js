@@ -45,7 +45,11 @@ async function getUser() {
       const formattedDate = `${currentYear}/${currentMonth
         .toString()
         .padStart(2, "0")}/01`;
-      const userBudget = { incomeThisMonth: 0, ExpenseThisMonth: 0 };
+      const userBudget = {
+        incomeThisMonth: 0,
+        ExpenseThisMonth: 0,
+        UserBudget: user.balance,
+      };
       const userIncome = await prisma.income.findMany({
         where: {
           AND: [
