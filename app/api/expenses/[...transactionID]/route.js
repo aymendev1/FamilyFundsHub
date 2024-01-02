@@ -11,11 +11,11 @@ async function getStats(req, context) {
   if (session) {
     try {
       // We export the Stats from DB based on the UserID from the session :
-      const Stats =
-        await prisma.$queryRaw`SELECT expenses.ExpenseID, expenses.Description,expenses.Date_created,expenses.Total,expensecategories.CategoryName AS category ,expenses.UserID, users.name,users.profilePicture,users.address FROM expenses INNER JOIN expensecategories ON expenses.CategoryID = expensecategories.CategoryID INNER JOIN users ON expenses.UserID = users.id WHERE expenses.ExpenseID=${Number(
+      const Details =
+        await prisma.$queryRaw`SELECT expenses.ExpenseID, expenses.Description, expenses.isTransfer, expenses.receiver_id, expenses.Date_created, expenses.Total, expensecategories.CategoryName AS category, expenses.UserID, CASE WHEN expenses.isTransfer = true THEN users.name ELSE NULL END AS transferUserName, CASE WHEN expenses.isTransfer = true THEN users.profilePicture ELSE NULL END AS transferUserProfilePicture, CASE WHEN expenses.isTransfer = 1 THEN users.address ELSE NULL END AS transferUserAddress FROM expenses INNER JOIN expensecategories ON expenses.CategoryID = expensecategories.CategoryID LEFT JOIN users ON expenses.receiver_id = users.id WHERE expenses.ExpenseID = ${Number(
           transactionID
         )}`;
-      if (Number(session.user.id) !== Stats[0].UserID) {
+      if (Number(session.user.id) !== Details[0].UserID) {
         return NextResponse.json(
           {
             error: "Access denied",
@@ -25,13 +25,9 @@ async function getStats(req, context) {
           }
         );
       }
-
-      return NextResponse.json(
-        { Stats },
-        {
-          status: 200,
-        }
-      );
+      return NextResponse.json(Details, {
+        status: 200,
+      });
     } catch (error) {
       console.error(error);
       return NextResponse.json(

@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { BsShieldLockFill } from "react-icons/bs";
 function TransactionDetailsCard(props) {
-  const { id } = props;
+  const { id, userDetails } = props;
   const [data, setData] = useState([]);
   const [isTransfer, setIsTransfer] = useState(false);
+  const [receiverDetails, setReceiverDetails] = useState([]);
   const [Loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -20,7 +21,10 @@ function TransactionDetailsCard(props) {
         if (res.status === 200) {
           const data = await res.json();
           setLoading(false);
-          setData(data.Stats[0]);
+          setData(data[0]);
+          if (data[0].isTransfer === 1) {
+            setIsTransfer(true);
+          }
         } else if (res.status === 401) {
           setError(res.statusText);
           setLoading(false);
@@ -30,6 +34,7 @@ function TransactionDetailsCard(props) {
       console.log(e);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -77,7 +82,7 @@ function TransactionDetailsCard(props) {
           </div>
           <div className="flex flex-row gap-10 pt-5">
             <img
-              src={data ? data.profilePicture : "/boyDefaultPP.jpg"}
+              src={data?.transferUserProfilePicture || "/boyDefaultPP.jpg"}
               alt="Profile Picture"
               className="object-cover h-[120px] w-[120px] rounded-lg"
             />
@@ -87,13 +92,7 @@ function TransactionDetailsCard(props) {
                   {!isTransfer ? "Preformed by :" : "Sender :"}
                 </span>
                 <span className="text-sm text-slate-950 font-black bigText ">
-                  {data?.name}
-                </span>
-              </div>
-              <div className="flex flex-col gap-2">
-                <span className="text-sm  text-slate-700">Address </span>
-                <span className="text-sm text-slate-950 font-black bigText ">
-                  {data?.address}
+                  {userDetails?.name}
                 </span>
               </div>
               <div className="flex flex-col gap-2">
@@ -106,34 +105,13 @@ function TransactionDetailsCard(props) {
                   })}
                 </span>
               </div>
-              {data?.category === "Transfer" ? (
+              {isTransfer ? (
                 <>
                   {" "}
                   <div className="flex flex-col gap-2">
                     <span className="text-sm  text-slate-700">Recipient :</span>
                     <span className="text-sm text-slate-950 font-black bigText ">
-                      Receiptient ID
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <span className="text-sm  text-slate-700">Address </span>
-                    <span className="text-sm text-slate-950 font-black bigText ">
-                      Rec Address
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <span className="text-sm  text-slate-700">
-                      Date Updated{" "}
-                    </span>
-                    <span className="text-sm text-slate-950 font-black bigText ">
-                      {new Date(data?.Date_created).toLocaleDateString(
-                        "default",
-                        {
-                          month: "long",
-                          year: "numeric",
-                          day: "2-digit",
-                        }
-                      )}
+                      {data?.transferUserName}
                     </span>
                   </div>
                 </>
@@ -144,21 +122,6 @@ function TransactionDetailsCard(props) {
                     <span className="text-sm  text-slate-700">Category </span>
                     <span className="text-sm text-slate-950 font-black bigText ">
                       {data?.category}
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <span className="text-sm  text-slate-700">
-                      Date Updated{" "}
-                    </span>
-                    <span className="text-sm text-slate-950 font-black bigText ">
-                      {new Date(data?.Date_created).toLocaleDateString(
-                        "default",
-                        {
-                          month: "long",
-                          year: "numeric",
-                          day: "2-digit",
-                        }
-                      )}
                     </span>
                   </div>
                 </>

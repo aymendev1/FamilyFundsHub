@@ -36,6 +36,8 @@ model expenses {
   Date_created      DateTime?         @default(now()) @db.DateTime(0)
   Description       String?           @db.VarChar(255)
   date_updated      DateTime          @default(now()) @db.DateTime(0)
+  isTransfer        Boolean?          @default(false)
+  receiver_id       Int
   users             users             @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expenses_ibfk_1")
   expensecategories expensecategories @relation(fields: [CategoryID], references: [CategoryID], onDelete: NoAction, onUpdate: NoAction, map: "expenses_ibfk_2")
 
@@ -107,9 +109,9 @@ model users {
   date_created   DateTime?        @default(now()) @db.DateTime(0)
   date_updated   DateTime?        @default(now()) @db.DateTime(0)
   name           String?          @db.Text
-  address        String?          @db.Text
   profilePicture String           @db.Text
   balance        Float            @default(0) @db.Float
+  address        String           @db.Text
   expenses       expenses[]
   income         income[]
   savingshistory savingshistory[]

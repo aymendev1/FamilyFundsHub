@@ -22,7 +22,7 @@ function page({ params }) {
         Transaction Details
       </span>
       <div className="flex flex-row gap-10 max-lg:gap-8 max-md:gap-6 max-sm:gap-4 w-full mt-5 max-md:flex-col-reverse">
-        <TransactionDetailsCard id={transactionID} />
+        <TransactionDetailsCard id={transactionID} userDetails={items?.user} />
         <div className="flex flex-col gap-10 w-[30%]  max-md:gap-6 max-sm:gap-4 max-md:flex-row max-md:w-full">
           <TotalBalanceCard data={items?.userBudget} />
           <QuickTransferCard
