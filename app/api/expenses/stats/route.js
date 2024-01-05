@@ -20,6 +20,8 @@ expenses
 WHERE UserID=${Number(session.user.id)}
 GROUP BY
 UserID, month
+ORDER BY
+    month DESC;
   `;
       const Months = [];
       const stats = [];

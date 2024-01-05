@@ -11,11 +11,9 @@ async function getCategories() {
     try {
       // We export the Stats from DB based on the UserID from the session :
       const Categories = await prisma.$queryRaw`
-SELECT
-    expenses.UserID, expensecategories.CategoryName, SUM(CASE WHEN expenses.CategoryID = expensecategories.CategoryID THEN expenses.Total ELSE 0 END) AS TotalSpent FROM expenses JOIN expensecategories  ON expenses.CategoryID = expensecategories.CategoryID WHERE expenses.UserID = ${Number(
-      session.user.id
-    )} GROUP BY expenses.UserID, expensecategories.CategoryName ORDER BY
-    TotalSpent DESC;
+SELECT expenses.UserID, expensecategories.CategoryName, SUM(CASE WHEN expenses.CategoryID = expensecategories.CategoryID THEN expenses.Total ELSE 0 END) AS TotalSpent FROM expenses JOIN expensecategories ON expenses.CategoryID = expensecategories.CategoryID WHERE expenses.UserID = ${Number(
+        session.user.id
+      )} AND MONTH(expenses.Date_created) = MONTH(CURRENT_DATE()) AND YEAR(expenses.Date_created) = YEAR(CURRENT_DATE()) GROUP BY expenses.UserID, expensecategories.CategoryName ORDER BY TotalSpent DESC
   `;
       return NextResponse.json(
         { Categories },
