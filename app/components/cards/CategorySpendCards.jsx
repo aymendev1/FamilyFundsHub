@@ -6,7 +6,7 @@ function CategorySpendCards(props) {
     const percentage = (spent / userBudget) * 100;
     return percentage.toFixed(2) + "%";
   };
-  const Colors = ["blue", "violet", "emerald"]; // Tailwind CSS colors Palletes
+  const Colors = ["blue", "violet", "emerald", "indigo"]; // Tailwind CSS colors Palletes
   return (
     <>
       {data?.map((item, i) => {
@@ -29,14 +29,14 @@ function CategorySpendCards(props) {
             <div className="flex flex-col gap-3">
               <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-100">
                 <div
-                  className={`bg-${Colors[i]}-950 h-2 rounded-full `}
+                  className={`bg-blue-950 h-2 rounded-full `}
                   style={{
                     width: `${CalculatePercentage(item.TotalSpent, userSpend)}`,
                   }}
                 ></div>
               </div>
               <span className="text-sm font-black text-slate-700">
-                ${item.TotalSpent} from{" "}
+                ${parseFloat(item.TotalSpent).toFixed(2)} from{" "}
                 <span className={`text-sm font-black text-${Colors[i]}-950`}>
                   ${userSpend}
                 </span>
