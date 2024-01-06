@@ -32,12 +32,12 @@ model expenses {
   ExpenseID         Int               @id @default(autoincrement())
   UserID            Int
   CategoryID        Int
-  Total             Int?              @default(0)
+  Total             Float?            @default(0) @db.Float
   Date_created      DateTime?         @default(now()) @db.DateTime(0)
   Description       String?           @db.VarChar(255)
   date_updated      DateTime          @default(now()) @db.DateTime(0)
   isTransfer        Boolean?          @default(false)
-  receiver_id       Int
+  receiver_id       Int?
   users             users             @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expenses_ibfk_1")
   expensecategories expensecategories @relation(fields: [CategoryID], references: [CategoryID], onDelete: NoAction, onUpdate: NoAction, map: "expenses_ibfk_2")
 
@@ -46,13 +46,13 @@ model expenses {
 }
 
 model family {
-  id           Int       @id @default(autoincrement())
-  familyName   String    @db.VarChar(255)
-  date_created DateTime? @default(now()) @db.DateTime(0)
-  date_updated DateTime? @default(now()) @db.DateTime(0)
-  budget       budget[]
-  savings      savings[]
-  users        users[]
+  id             Int              @id @default(autoincrement())
+  familyName     String           @db.VarChar(255)
+  date_created   DateTime?        @default(now()) @db.DateTime(0)
+  date_updated   DateTime?        @default(now()) @db.DateTime(0)
+  budget         budget[]
+  family_savings family_savings[]
+  users          users[]
 }
 
 model income {
@@ -62,62 +62,96 @@ model income {
   Total        Int?      @default(0)
   Date_created DateTime? @default(now()) @db.DateTime(0)
   Description  String?   @db.VarChar(255)
+  TransferID   Int?
   users        users     @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "income_ibfk_1")
 
   @@index([UserID], map: "UserID")
 }
 
-model savings {
-  SavingID       Int              @id @default(autoincrement())
-  FamilyID       Int
-  total          Float?           @default(0) @db.Float
-  date_created   DateTime?        @default(now()) @db.DateTime(0)
-  date_start     DateTime?        @default(now()) @db.DateTime(0)
-  date_end       DateTime?        @default(now()) @db.DateTime(0)
-  date_updated   DateTime?        @default(now()) @db.DateTime(0)
-  Status         String?          @db.VarChar(255)
-  Description    String?          @db.VarChar(255)
-  family         family           @relation(fields: [FamilyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "savings_ibfk_1")
-  savingshistory savingshistory[]
+model users {
+  id                     Int                      @id @default(autoincrement())
+  username               String                   @unique @db.VarChar(255)
+  email                  String                   @unique @db.VarChar(255)
+  password               String                   @db.VarChar(255)
+  bio                    String?                  @db.VarChar(255)
+  role                   Int
+  familyID               Int?
+  date_created           DateTime?                @default(now()) @db.DateTime(0)
+  date_updated           DateTime?                @default(now()) @db.DateTime(0)
+  name                   String?                  @db.Text
+  profilePicture         String                   @db.Text
+  balance                Float                    @default(0) @db.Float
+  address                String                   @db.Text
+  expenses               expenses[]
+  family_savings_history family_savings_history[]
+  income                 income[]
+  family                 family?                  @relation(fields: [familyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+  users_savings          users_savings[]
+  users_savings_history  users_savings_history[]
+
+  @@index([familyID], map: "FamilyID")
+}
+
+model family_savings {
+  SavingID               Int                      @id @default(autoincrement())
+  FamilyID               Int
+  total                  Float?                   @default(0) @db.Float
+  date_created           DateTime?                @default(now()) @db.DateTime(0)
+  date_start             DateTime?                @default(now()) @db.DateTime(0)
+  date_end               DateTime?                @default(now()) @db.DateTime(0)
+  date_updated           DateTime?                @default(now()) @db.DateTime(0)
+  Status                 String?                  @db.VarChar(255)
+  Description            String?                  @db.VarChar(255)
+  family                 family                   @relation(fields: [FamilyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_ibfk_1")
+  family_savings_history family_savings_history[]
 
   @@index([FamilyID], map: "FamilyID")
 }
 
-model savingshistory {
-  SavingsHistoryID Int       @id @default(autoincrement())
+model family_savings_history {
+  SavingsHistoryID Int            @id @default(autoincrement())
   SavingID         Int
   UserID           Int
-  date_created     DateTime? @default(now()) @db.DateTime(0)
-  total            Float?    @db.Float
-  Status           String?   @db.VarChar(255)
-  Description      String?   @db.VarChar(255)
-  savings          savings   @relation(fields: [SavingID], references: [SavingID], onDelete: NoAction, onUpdate: NoAction, map: "savingshistory_ibfk_1")
-  users            users     @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "savingshistory_ibfk_2")
+  date_created     DateTime?      @default(now()) @db.DateTime(0)
+  total            Float?         @db.Float
+  Status           String?        @db.VarChar(255)
+  Description      String?        @db.VarChar(255)
+  family_savings   family_savings @relation(fields: [SavingID], references: [SavingID], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_history_ibfk_1")
+  users            users          @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_history_ibfk_2")
 
   @@index([SavingID], map: "SavingID")
   @@index([UserID], map: "UserID")
 }
 
-model users {
-  id             Int              @id @default(autoincrement())
-  username       String           @unique @db.VarChar(255)
-  email          String           @unique @db.VarChar(255)
-  password       String           @db.VarChar(255)
-  bio            String?          @db.VarChar(255)
-  role           Int
-  familyID       Int?
-  date_created   DateTime?        @default(now()) @db.DateTime(0)
-  date_updated   DateTime?        @default(now()) @db.DateTime(0)
-  name           String?          @db.Text
-  profilePicture String           @db.Text
-  balance        Float            @default(0) @db.Float
-  address        String           @db.Text
-  expenses       expenses[]
-  income         income[]
-  savingshistory savingshistory[]
-  family         family?          @relation(fields: [familyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+model users_savings {
+  SavingID              Int                     @id @default(autoincrement())
+  UserID                Int
+  total                 Float?                  @default(0) @db.Float
+  date_created          DateTime?               @default(now()) @db.DateTime(0)
+  date_start            DateTime?               @default(now()) @db.DateTime(0)
+  date_end              DateTime?               @default(now()) @db.DateTime(0)
+  date_updated          DateTime?               @default(now()) @db.DateTime(0)
+  Status                String?                 @db.VarChar(255)
+  Description           String?                 @db.VarChar(255)
+  users                 users                   @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_savings_ibfk_1")
+  users_savings_history users_savings_history[]
 
-  @@index([familyID], map: "FamilyID")
+  @@index([UserID], map: "UserID")
+}
+
+model users_savings_history {
+  SavingsHistoryID Int           @id @default(autoincrement())
+  SavingID         Int
+  UserID           Int
+  date_created     DateTime?     @default(now()) @db.DateTime(0)
+  total            Float?        @db.Float
+  Status           String?       @db.VarChar(255)
+  Description      String?       @db.VarChar(255)
+  users_savings    users_savings @relation(fields: [SavingID], references: [SavingID], onDelete: NoAction, onUpdate: NoAction, map: "users_savings_history_ibfk_1")
+  users            users         @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_savings_history_ibfk_2")
+
+  @@index([SavingID], map: "SavingID")
+  @@index([UserID], map: "UserID")
 }
 
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
