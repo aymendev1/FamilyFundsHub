@@ -39,6 +39,27 @@ async function getUser() {
       const ExpensesCategories = await prisma.expensecategories.findMany({
         select: { CategoryID: true, CategoryName: true },
       });
+      const UserSavingLastMonth = await prisma.users_savings_history.groupBy({
+        by: ["date_created"],
+        where: {
+          UserID: user.id,
+          date_created: {
+            gte: new Date(
+              new Date().getFullYear(),
+              new Date().getMonth() - 1,
+              1
+            ),
+            lt: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+          },
+        },
+        _sum: {
+          total: true,
+        },
+        orderBy: {
+          date_created: "desc",
+        },
+      });
+
       // Get the current date
       const currentDate = new Date();
       // Get the current month and year
@@ -52,6 +73,7 @@ async function getUser() {
         incomeThisMonth: 0,
         ExpenseThisMonth: 0,
         UserBudget: user.balance,
+        UserSavingLastMonth: UserSavingLastMonth[0]?._sum,
       };
       const userIncome = await prisma.income.findMany({
         where: {
