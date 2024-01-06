@@ -50,16 +50,13 @@ function SavingsCategories() {
 
   return (
     <div className="w-[40%] rounded-lg bg-white flex flex-col p-4">
-      <span className="text-xl  font-black  text-blue-950">
-        Savings Categories
-      </span>
+      <span className="text-xl  font-black  text-blue-950">Savings Goals</span>
       <Chart
         chartType="PieChart"
         data={data}
         options={options}
         width={"100%"}
         height={"100%"}
-        className="flex flex-col "
         legendToggle
       />
     </div>
