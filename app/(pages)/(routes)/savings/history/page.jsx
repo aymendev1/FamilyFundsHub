@@ -69,12 +69,10 @@ function page() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      await fetch("/api/savings/history", { method: "GET" }).then(
-        async (res) => {
-          const data = await res.json();
-          setLatestSavings(data.Savings);
-        }
-      );
+      await fetch("/api/savings/", { method: "GET" }).then(async (res) => {
+        const data = await res.json();
+        setLatestSavings(data.Savings);
+      });
       setLoading(false);
     } catch (e) {
       console.log(e);
@@ -115,7 +113,6 @@ function page() {
           </button>
         </div>
 
-        {/*        Table To Be Edited after Fetching Data from Server */}
         <LatestTransactionsTable data={LatestSavings} columns={columns} />
       </div>
     </>

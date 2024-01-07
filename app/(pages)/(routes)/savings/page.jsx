@@ -7,10 +7,10 @@ import OverviewChartDashboard from "@/app/components/charts/overviewChartDashboa
 import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
 import SavingsCategories from "@/app/components/cards/SavingsCategories";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
-import { BsBoxArrowUpRight } from "react-icons/bs";
+import { BsBoxArrowUpRight, BsPlusCircleDotted } from "react-icons/bs";
+
 function page() {
   const [Loading, setLoading] = useState();
-
   const { items, loading, error } = useSelector((state) => state.userData);
   const [monthlyStats, setMonthlyStats] = useState([]);
   const [LatestSavings, setLatestSavings] = useState([]);
@@ -34,6 +34,7 @@ function page() {
     {
       name: "Description",
       selector: (row) => row.Description,
+      grow: 2,
     },
     {
       name: "Status",
@@ -44,27 +45,9 @@ function page() {
       selector: (row) => "$ " + String(row.total),
     },
     {
-      name: "Date Start",
+      name: "Date Created",
       selector: (row) =>
-        new Date(row.date_start).toLocaleDateString("default", {
-          month: "long",
-          year: "numeric",
-          day: "2-digit",
-        }),
-    },
-    {
-      name: "Date End",
-      selector: (row) =>
-        new Date(row.date_end).toLocaleDateString("default", {
-          month: "long",
-          year: "numeric",
-          day: "2-digit",
-        }),
-    },
-    {
-      name: "Last Update",
-      selector: (row) =>
-        new Date(row.date_updated).toLocaleDateString("default", {
+        new Date(row.date_created).toLocaleDateString("default", {
           month: "long",
           year: "numeric",
           day: "2-digit",
@@ -76,7 +59,10 @@ function page() {
         <button
           className="bg-blue-950 hover:bg-blue-600 ease-out duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-sm flex flex-row items-center gap-2 justify-center"
           onClick={() => {
-            window.open(`/savings/${row.SavingID}`, "_blank");
+            window.open(
+              `/savings/contributions/${row.SavingsHistoryID}`,
+              "_blank"
+            );
           }}
         >
           <span className="flex-1">View More</span>
@@ -138,11 +124,25 @@ function page() {
         <SavingsCategories />
       </div>
       <div className="flex bg-white rounded-lg mt-8 flex-col p-4 gap-2  max-lg:flex-col">
-        <span className="text-xl  font-black  text-blue-950">
-          Latest Savings
-        </span>
-        <span className="text-md text-slate-700">Your Savings History</span>
-        {/*        Table To Be Edited after Fetching Data from Server */}
+        <div className="flex flex-row justify-between gap-2 w-full">
+          <div className="flex flex-col gap-2">
+            <span className="text-xl  font-black  text-blue-950">
+              Latest Savings Contributions
+            </span>
+            <span className="text-md text-slate-700">
+              Your contributions history
+            </span>
+          </div>
+          <button
+            className="bg-blue-950 hover:bg-blue-600 ease-out h-fit duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-sm flex flex-row items-center gap-2 justify-center"
+            onClick={() => {
+              window.open(`/savings/add`, "_blank");
+            }}
+          >
+            <span className="flex-1">Create a contribution</span>
+            <BsPlusCircleDotted className="min-w-[15px] h-[15px] " />
+          </button>
+        </div>
         <LatestTransactionsTable data={LatestSavings} columns={columns} />
       </div>
     </>

@@ -3,17 +3,16 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { SyncLoader } from "react-spinners";
 import "react-toastify/dist/ReactToastify.css";
-export default function NewSavingsForm() {
+export default function NewContributionForm(props) {
+  const { userSavingGoal } = props;
   const [Description, setDescription] = useState("");
   const [Total, setTotal] = useState("");
-  const [Status, setStatus] = useState("");
-  const [StartDate, setStartDate] = useState(new Date());
-  const [EndDate, setEndDate] = useState(new Date());
+  const [SavingGoal, setSavingGoal] = useState("");
   const [Loading, setLoading] = useState(false);
   const CreateSavings = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await fetch("/api/savings/goal", {
+    await fetch("/api/savings/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,15 +20,14 @@ export default function NewSavingsForm() {
       body: JSON.stringify({
         Description: Description,
         Total: Total,
-        Status: Status,
-        StartDate: StartDate,
-        EndDate: EndDate,
+        SavingGoal: SavingGoal,
+        Status: "Added",
       }),
     }).then(async (res) => {
       setLoading(false);
       if (res.status === 200) {
         const data = await res.json();
-        toast.success("Saving Goal Created successfully !", {
+        toast.success("Contribution Added successfully !", {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
@@ -39,7 +37,7 @@ export default function NewSavingsForm() {
           progress: undefined,
           theme: "light",
         });
-        window.location.replace(`/savings/${data.SavingGoal.SavingID}`);
+        window.location.replace(`/savings/contributions/${data.id}`);
       } else {
         setLoading(false);
         const error = await res.json();
@@ -64,7 +62,7 @@ export default function NewSavingsForm() {
       className="bg-white rounded-lg p-4 w-full flex flex-col gap-3"
     >
       <span class="text-xl  font-black  text-blue-950">
-        Create a new saving goal
+        Create a new contribution
       </span>
       <span class="text-md text-slate-700 border-b border-gray-900/10 pb-4">
         Fill in the bellow formulary :
@@ -105,7 +103,7 @@ export default function NewSavingsForm() {
                 htmlFor="SavingTotal"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Amount to be saved :
+                Amount to be add :
               </label>
               <div className="mt-2">
                 <input
@@ -124,61 +122,24 @@ export default function NewSavingsForm() {
                 htmlFor="SavingStatus"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Saving Status
+                Saving Goal
               </label>
               <div className="mt-2">
                 <select
-                  name="SavingStatus"
-                  id="SavingStatus"
-                  autoComplete="SavingStatus"
-                  value={Status}
-                  onChange={(e) => setStatus(e.target.value)}
+                  name="SavingGoal"
+                  id="SavingGoal"
+                  autoComplete="SavingGoal"
+                  value={SavingGoal}
+                  onChange={(e) => setSavingGoal(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   required
                 >
-                  <option value={"Completed"}>Completed</option>
-                  <option value={"Active"}>Active</option>
-                  <option value={"Not Started"}>Not Started Yet</option>
+                  {userSavingGoal?.map((item, i) => {
+                    return (
+                      <option value={item.SavingID}>{item.Description}</option>
+                    );
+                  })}
                 </select>
-              </div>
-            </div>
-
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="SavingStartDate"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Start Date
-              </label>
-              <div className="mt-2">
-                <input
-                  type="date"
-                  name="SavingStartDate"
-                  value={StartDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  autoComplete="SavingStartDate"
-                  className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  required
-                />
-              </div>
-            </div>
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="SavingEndDate"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                End Date
-              </label>
-              <div className="mt-2">
-                <input
-                  type="date"
-                  name="SavingEndDate"
-                  value={EndDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  autoComplete="SavingEndDate"
-                  className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  required
-                />
               </div>
             </div>
           </div>

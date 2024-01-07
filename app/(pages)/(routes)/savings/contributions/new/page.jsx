@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import RecentSavings from "@/app/components/cards/RecentSavings";
-import NewSavingsForm from "@/app/components/forms/NewSavingsForm";
+import NewContributionForm from "@/app/components/forms/NewContributionForm";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { ToastContainer } from "react-toastify";
 function page() {
   const [Loading, setLoading] = useState(false);
   const [Data, setData] = useState([]);
+  const [SavingsGoals, setSavingsGoals] = useState([]);
   const [error, setError] = useState([]);
   const fetchData = async () => {
     try {
@@ -23,6 +24,10 @@ function page() {
           setError(res.statusText);
           setLoading(false);
         }
+      });
+      await fetch("/api/savings/goal", { method: "GET" }).then(async (res) => {
+        const data = await res.json();
+        setSavingsGoals(data.Savings);
       });
     } catch (e) {
       console.log(e);
@@ -49,10 +54,12 @@ function page() {
       />
       {/* Page Title */}
       <div className=" pb-5">
-        <span className="text-3xl font-black  text-blue-950 ">Savings</span>
+        <span className="text-3xl font-black  text-blue-950 ">
+          Contributions
+        </span>
       </div>
       <div className="w-full flex flex-row gap-10 ">
-        <NewSavingsForm />
+        <NewContributionForm userSavingGoal={SavingsGoals} />
         <div className="w-[30%]">
           <RecentSavings data={Data} />
         </div>
