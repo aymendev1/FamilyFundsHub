@@ -13,6 +13,12 @@ async function getSavings() {
       const Savings = await prisma.$queryRaw`
 SELECT users_savings_history.SavingsHistoryID, users_savings_history.Description, users_savings_history.date_created, users_savings_history.total, users_savings_history.Status, users.name, users.profilePicture, users_savings.Description AS SavingName FROM users_savings_history INNER JOIN users ON users_savings_history.UserID = users.id INNER JOIN users_savings ON users_savings.SavingID = users_savings_history.SavingID WHERE users_savings_history.UserID = ${session.user.id} ORDER BY users_savings_history.date_created DESC
   `;
+      Savings.map((saving) => {
+        saving.profilePicture = saving.profilePicture
+          .toString("base64")
+          .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
+      });
+
       return NextResponse.json(
         { Savings },
         {

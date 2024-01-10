@@ -76,9 +76,26 @@ async function UpdateProfile(req) {
       }
     );
   }
+
   // We check if the user is Authenticated
   if (session) {
     try {
+      //we check if username or email is already user by another member
+      const checkingusername = await prisma.users.findFirst({
+        where: { OR: [{ username: username }, { email: email }] },
+      });
+      console.log(checkingusername?.id);
+      if (checkingusername && checkingusername.id !== session.user.id) {
+        return NextResponse.json(
+          {
+            error: "Username or email is already in use ",
+          },
+          {
+            status: 400,
+          }
+        );
+      }
+
       const coverpic = Buffer.from(newCoverPicture, "base64");
 
       const Profilepic = Buffer.from(newProfilePicture, "base64");

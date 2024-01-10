@@ -11,7 +11,7 @@ async function getStats(req, context) {
   if (session) {
     try {
       // We export the Stats from DB based on the UserID from the session :
-      const Details = await prisma.users_savings_history.findMany({
+      const Details = await prisma.users_savings_history.findUnique({
         where: { SavingsHistoryID: Number(contrID) },
         select: {
           total: true,
@@ -32,8 +32,20 @@ async function getStats(req, context) {
           },
         },
       });
-
-      if (Number(session.user.id) !== Details[0].UserID) {
+      if (!Details) {
+        return NextResponse.json(
+          {
+            error: "Not Found",
+          },
+          {
+            status: 404,
+          }
+        );
+      }
+      Details.users.profilePicture = Details.users.profilePicture
+        .toString("base64")
+        .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
+      if (Number(session.user.id) !== Details.UserID) {
         return NextResponse.json(
           {
             error: "Access denied",

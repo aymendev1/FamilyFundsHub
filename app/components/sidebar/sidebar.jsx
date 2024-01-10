@@ -1,10 +1,18 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UserProfile from "./UserProfile";
 import SidebarData from "./sidebarData";
 import { BiChevronLeft } from "react-icons/bi";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchDataFromDB } from "@/redux/slices/userSlice";
+
 function sidebar() {
   const [toggle, setToggle] = useState(true);
+  const { items, loading, error } = useSelector((state) => state.userData);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchDataFromDB());
+  }, [dispatch]);
   const handleToggle = () => {
     setToggle(!toggle);
   };
@@ -27,8 +35,8 @@ function sidebar() {
           } text-3xl text-blue-950 transition-all duration-300 `}
         />
       </button>
-      <UserProfile toggle={toggle} />
-      <SidebarData toggle={toggle} />
+      <UserProfile toggle={toggle} data={items?.user} />
+      <SidebarData toggle={toggle} username={items?.user?.username} />
     </div>
   );
 }

@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { FaTrashAlt } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+
 export default function EditProfile() {
   const [newProfilePicture, setNewProfilePicture] = useState();
   const [newCoverPicture, setNewCoverPicture] = useState();
@@ -65,10 +67,33 @@ export default function EditProfile() {
     }).then(async (res) => {
       setLoading(false);
       if (res.status === 200) {
-        window.location.replace(`/profile/${username}`);
+        toast.success("Changes Saved successfully !", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return setTimeout(
+          () => window.location.replace(`/profile/${username}`),
+          5000
+        );
       } else {
-        const error = await res.json();
-        setError(error.error);
+        setLoading(false);
+        const err = await res.json();
+        toast.error(err.error, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     });
   };

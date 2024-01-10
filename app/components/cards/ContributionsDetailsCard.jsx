@@ -19,10 +19,12 @@ export default function ContributionDetailsCard(props) {
         if (res.status === 200) {
           const data = await res.json();
           setLoading(false);
-          setData(data[0]);
+          setData(data);
         } else if (res.status === 401) {
           setError(res.statusText);
           setLoading(false);
+        } else if (res.status === 404) {
+          return window.location.replace("/404");
         }
       });
     } catch (e) {

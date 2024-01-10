@@ -12,9 +12,6 @@ import {
 function ProfileComponent(props) {
   const { username } = props;
   const [ProfileDetails, setProfileDetails] = useState([]);
-  const [profilePicture, setProfilePicture] = useState("");
-  const [coverPicture, setCoverPicture] = useState("");
-
   const [Loading, setLoading] = useState([]);
   const { items, loading, error } = useSelector((state) => state.userData);
   const dispatch = useDispatch();

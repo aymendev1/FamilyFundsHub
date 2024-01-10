@@ -25,6 +25,10 @@ async function getUser() {
           balance: true,
         },
       });
+      user.profilePicture = user.profilePicture
+        .toString("base64")
+        .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
+
       const familyBudget = await prisma.budget.findUnique({
         where: { familyID: user.familyID },
         select: { familyID: true, total_income: true, total_expense: true },
@@ -36,6 +40,11 @@ async function getUser() {
       const familyMembers = await prisma.users.findMany({
         where: { familyID: user.familyID },
         select: { id: true, name: true, profilePicture: true, role: true },
+      });
+      familyMembers.map((member) => {
+        member.profilePicture = member.profilePicture
+          .toString("base64")
+          .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
       });
       const ExpensesCategories = await prisma.expensecategories.findMany({
         select: { CategoryID: true, CategoryName: true },
