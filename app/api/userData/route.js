@@ -20,6 +20,7 @@ async function getUser() {
           role: true,
           familyID: true,
           name: true,
+          username: true,
           profilePicture: true,
           balance: true,
         },
@@ -34,7 +35,7 @@ async function getUser() {
       });
       const familyMembers = await prisma.users.findMany({
         where: { familyID: user.familyID },
-        select: { id: true, name: true, profilePicture: true },
+        select: { id: true, name: true, profilePicture: true, role: true },
       });
       const ExpensesCategories = await prisma.expensecategories.findMany({
         select: { CategoryID: true, CategoryName: true },
