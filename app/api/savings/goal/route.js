@@ -10,10 +10,15 @@ async function getSavingGoals() {
     try {
       // We export the Stats from DB based on the UserID from the session :
       const Savings = await prisma.$queryRaw`
-SELECT users_savings.SavingID, users_savings.Description,users_savings.date_updated,users_savings.total,users_savings.Status,users_savings.date_start,users_savings.date_end, users.name,users.profilePicture FROM users_savings INNER JOIN users ON users_savings.UserID = users.id WHERE users_savings.UserID=${Number(
+SELECT users_savings.SavingID, users_savings.Description,users_savings.date_updated,users_savings.total,users_savings.Status,users_savings.date_start,users_savings.date_end, users.name, users.profilePicture FROM users_savings INNER JOIN users ON users_savings.UserID = users.id WHERE users_savings.UserID=${Number(
         session.user.id
       )}
   `;
+      Savings.map((saving) => {
+        saving.profilePicture = saving.profilePicture
+          .toString("base64")
+          .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
+      });
       return NextResponse.json(
         { Savings },
         {

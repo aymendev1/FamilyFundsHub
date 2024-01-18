@@ -33,6 +33,11 @@ async function getStats(req, context) {
           },
         },
       });
+      SavingDetails.map((saving) => {
+        saving.profilePicture = saving.profilePicture
+          .toString("base64")
+          .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
+      });
       if (!SavingDetails) {
         return NextResponse.json(
           {

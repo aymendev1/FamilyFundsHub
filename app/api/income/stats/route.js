@@ -51,6 +51,9 @@ UserID, month
           status: 500,
         }
       );
+    } finally {
+      // Disconnect from the Prisma client when done
+      await prisma.$disconnect();
     }
   }
   return NextResponse.json(

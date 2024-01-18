@@ -84,7 +84,6 @@ async function UpdateProfile(req) {
       const checkingusername = await prisma.users.findFirst({
         where: { OR: [{ username: username }, { email: email }] },
       });
-      console.log(checkingusername?.id);
       if (checkingusername && checkingusername.id !== session.user.id) {
         return NextResponse.json(
           {

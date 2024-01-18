@@ -13,6 +13,7 @@ function page() {
   const { items, loading, error } = useSelector((state) => state.userData);
   const [monthlyStats, setMonthlyStats] = useState([]);
   const [LatestTransactions, setLatestTransactions] = useState([]);
+  const [Loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   // Table's Column
   const columns = [
@@ -40,7 +41,8 @@ function page() {
     },
     {
       name: "Total",
-      selector: (row) => "$ " + String(row.Total),
+      selector: (row) =>
+        "$ " + parseFloat(row.Total).toFixed(2).toLocaleString(),
     },
     {
       name: "Date",
@@ -71,6 +73,7 @@ function page() {
   }, [dispatch]);
   // We import Monthly Stats and Latest Items From API
   const fetchData = async () => {
+    setLoading(true);
     try {
       // Monthly Stats
       await fetch("/api/income/stats", { method: "GET" }).then(async (res) => {
@@ -81,14 +84,17 @@ function page() {
         const data = await res.json();
         setLatestTransactions(data);
       });
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       console.log(e);
     }
   };
   useEffect(() => {
     fetchData();
+    document.title = "Dashboard";
   }, []);
-  return loading ? (
+  return loading || Loading ? (
     <ComponentLoader />
   ) : (
     <>
@@ -143,5 +149,4 @@ function page() {
     </>
   );
 }
-
 export default page;

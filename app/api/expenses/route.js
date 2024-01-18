@@ -15,6 +15,11 @@ SELECT expenses.ExpenseID, expenses.Description,expenses.Date_created,expenses.T
         session.user.id
       )} WHERE users.id=${Number(session.user.id)}
   `;
+      Expenses.map((expense) => {
+        expense.profilePicture = expense.profilePicture
+          .toString("base64")
+          .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
+      });
       return NextResponse.json(
         { Expenses },
         {
@@ -32,6 +37,9 @@ SELECT expenses.ExpenseID, expenses.Description,expenses.Date_created,expenses.T
           status: 500,
         }
       );
+    } finally {
+      // Disconnect from the Prisma client when done
+      await prisma.$disconnect();
     }
   }
 

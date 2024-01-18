@@ -1,64 +1,51 @@
 "use client";
+import { FiArrowUpRight } from "react-icons/fi";
+import { MdSavings } from "react-icons/md";
 import React from "react";
-import { Chart } from "react-google-charts";
-function SavingsCategories() {
-  const data = [
-    ["SavingCategory", "AmountInUSD"],
-    ["Vacations", 1000],
-    ["Furnitures", 700],
-    ["Mortage", 800],
-    ["Electronics", 302],
-    ["Anchovies", 500],
-  ];
-  const colors = [
-    "#6366f1",
-    "#60a5fa",
-    "#0369a1",
-    "#fb7185",
-    "#14b8a6",
-    "#047857",
-    "#65a30d",
-    "#facc15",
-    "#6d28d9",
-    "#c084fc",
-    "#f472b6",
-    "#f59e0b",
-    "#e879f9",
-    "#f97316",
-    "#ef4444",
-  ];
-  const options = {
-    fontSize: 15,
-    fontName: "Noto Sans",
-    chartArea: { left: 20, top: 20, width: "100%", height: "50%" },
-    colors: colors,
-    legend: {
-      display: "none",
-      position: "bottom",
-
-      textStyle: { color: "black", fontSize: 16 },
-    },
-    sliceVisibilityThreshold: 0.1,
-    pieSliceTextStyle: {
-      color: "white",
-      fontSize: "13",
-      top: 10,
-      left: 50,
-      position: "start",
-    },
-  };
+function SavingsCategories(props) {
+  const { data } = props;
 
   return (
-    <div className="w-[40%] rounded-lg bg-white flex flex-col p-4">
-      <span className="text-xl  font-black  text-blue-950">Savings Goals</span>
-      <Chart
-        chartType="PieChart"
-        data={data}
-        options={options}
-        width={"100%"}
-        height={"100%"}
-        legendToggle
-      />
+    <div className="w-[40%] rounded-lg bg-white flex flex-col gap-4 p-4">
+      <div className="flex flex-row justify-between gap-2 w-full">
+        <div className="flex flex-col gap-2">
+          <span className="text-xl  font-black  text-blue-950">
+            Active Saving Goals
+          </span>
+        </div>
+        <button
+          className="bg-blue-950 hover:bg-blue-600 ease-out h-fit duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-sm flex flex-row items-center gap-2 justify-center"
+          onClick={() => {
+            window.open(`/savings/goals`, "_blank");
+          }}
+        >
+          <span className="flex-1">View all </span>
+          <FiArrowUpRight className="min-w-[15px] h-[15px] " />
+        </button>
+      </div>
+      <div className="flex flex-col gap-2 w-full overflow-y-auto h-full">
+        {data?.map((item, i) => {
+          return (
+            <div
+              key={i}
+              className="flex flex-row gap-2 justify-between items-center  hover:rounded hover:cursor-pointer hover:bg-blue-50"
+              onClick={() => window.open(`/savings/${item.SavingID}`, "_blank")}
+            >
+              <div
+                className={`w-[40px] h-[40px] rounded-lg bg-indigo-100 flex items-center justify-center`}
+              >
+                <MdSavings className={`text-indigo-950 h-[20px] w-[20px]`} />
+              </div>
+              <span className="text-base  font-semibold  text-blue-950 flex-1">
+                {item.Description}
+              </span>
+              <span className="text-base  font-semibold  text-blue-950">
+                $ {item.total}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

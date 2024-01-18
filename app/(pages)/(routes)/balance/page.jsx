@@ -8,7 +8,6 @@ import ActionMenu from "@/app/components/Menus/ActionMenu";
 import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchDataFromDB } from "@/redux/slices/userSlice";
-import { ToastContainer } from "react-toastify";
 import { BsBoxArrowUpRight } from "react-icons/bs";
 
 function page() {
@@ -16,8 +15,10 @@ function page() {
   const { items, loading, error } = useSelector((state) => state.userData);
   const [spendCategories, setSpendCategories] = useState([]);
   const [LatestTransactions, setLatestTransactions] = useState([]);
+  const [Loading, setLoading] = useState(false);
   const fetchData = async () => {
     try {
+      setLoading(true);
       // Monthly Stats
       await fetch("/api/expenses/categories", { method: "GET" }).then(
         async (res) => {
@@ -29,8 +30,10 @@ function page() {
         const data = await res.json();
         setLatestTransactions(data);
       });
+      setLoading(false);
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
   };
 
@@ -92,22 +95,10 @@ function page() {
   useEffect(() => {
     dispatch(fetchDataFromDB());
   }, [dispatch]);
-  return loading ? (
+  return loading || Loading ? (
     <ComponentLoader />
   ) : (
     <>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       {/* Page Title */}
       <div className=" pb-5">
         <span className="text-3xl  font-black  text-blue-950 ">Balance</span>
