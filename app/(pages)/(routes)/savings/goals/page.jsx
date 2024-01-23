@@ -33,7 +33,7 @@ function page() {
     },
     {
       name: "Total",
-      selector: (row) => "$ " + String(row.total),
+      selector: (row) => "$ " + String(row.total.toFixed(2)),
     },
     {
       name: "Start date",
@@ -93,6 +93,7 @@ function page() {
   };
   useEffect(() => {
     fetchData();
+    document.title = "Saving Goals";
   }, []);
 
   return Loading ? (

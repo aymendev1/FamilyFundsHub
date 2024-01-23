@@ -37,7 +37,7 @@ function page() {
     },
     {
       name: "Total",
-      selector: (row) => "$ " + String(row.total),
+      selector: (row) => "$ " + String(row.total.toFixed(2)),
     },
 
     {
@@ -80,6 +80,7 @@ function page() {
   };
   useEffect(() => {
     fetchData();
+    document.title = "Savings Contributions History";
   }, []);
 
   return Loading ? (

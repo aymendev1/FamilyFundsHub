@@ -13,6 +13,7 @@ function page({ params }) {
   const { items, loading, error } = useSelector((state) => state.userData);
   useEffect(() => {
     dispatch(fetchDataFromDB());
+    document.title = `Saving Goal #${savingsID}`;
   }, [dispatch]);
   return loading ? (
     <ComponentLoader />

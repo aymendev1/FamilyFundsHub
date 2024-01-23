@@ -12,6 +12,7 @@ function page({ params }) {
   const { items, loading, error } = useSelector((state) => state.userData);
   useEffect(() => {
     dispatch(fetchDataFromDB());
+    document.title = `Transaction Details #${transactionID}`;
   }, [dispatch]);
   return loading ? (
     <ComponentLoader />

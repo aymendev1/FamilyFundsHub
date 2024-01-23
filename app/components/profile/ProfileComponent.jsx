@@ -23,8 +23,10 @@ function ProfileComponent(props) {
     await fetch(`/api/profile/${username}`, { method: "GET" }).then(
       async (res) => {
         const data = await res.json();
+        if (res.status === 404) {
+          return window.location.replace("/404");
+        }
         setProfileDetails(data);
-
         setLoading(false);
       }
     );

@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import RecentExpenses from "@/app/components/cards/RecentExpenses";
 import NewExpenseForm from "@/app/components/forms/NewExpenseForm";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
-import { ToastContainer } from "react-toastify";
 
 function page() {
   const [Loading, setLoading] = useState(false);
@@ -28,28 +27,18 @@ function page() {
       });
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchData();
+    document.title = "New Expense";
   }, []);
   return Loading ? (
     <ComponentLoader />
   ) : (
     <>
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       {/* Page Title */}
       <div className=" pb-5">
         <span className="text-3xl font-black  text-blue-950 ">Transaction</span>

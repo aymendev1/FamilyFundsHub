@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import RecentSavings from "@/app/components/cards/RecentSavings";
 import NewSavingsForm from "@/app/components/forms/NewSavingsForm";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
-import { ToastContainer } from "react-toastify";
 function page() {
   const [Loading, setLoading] = useState(false);
   const [Data, setData] = useState([]);
@@ -35,18 +34,6 @@ function page() {
     <ComponentLoader />
   ) : (
     <>
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       {/* Page Title */}
       <div className=" pb-5">
         <span className="text-3xl font-black  text-blue-950 ">Savings</span>

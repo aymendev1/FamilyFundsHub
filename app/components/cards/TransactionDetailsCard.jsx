@@ -6,7 +6,6 @@ function TransactionDetailsCard(props) {
   const { id, userDetails } = props;
   const [data, setData] = useState([]);
   const [isTransfer, setIsTransfer] = useState(false);
-  const [receiverDetails, setReceiverDetails] = useState([]);
   const [Loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -82,7 +81,11 @@ function TransactionDetailsCard(props) {
           </div>
           <div className="flex flex-row gap-10 pt-5">
             <img
-              src={data?.transferUserProfilePicture || "/boyDefaultPP.jpg"}
+              src={
+                isTransfer
+                  ? data?.transferUserProfilePicture
+                  : userDetails?.profilePicture
+              }
               alt="Profile Picture"
               className="object-cover h-[120px] w-[120px] rounded-lg"
             />
@@ -140,7 +143,7 @@ function TransactionDetailsCard(props) {
                 <tr className="h-[50px]">
                   <td>{data?.Description}</td>
                   <td className=" text-emerald-700 font-black bigText ">
-                    $ {data?.Total}
+                    $ {data?.Total?.toFixed(2)}
                   </td>
                 </tr>
               </tbody>

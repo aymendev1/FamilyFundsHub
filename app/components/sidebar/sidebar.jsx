@@ -5,6 +5,7 @@ import SidebarData from "./sidebarData";
 import { BiChevronLeft } from "react-icons/bi";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchDataFromDB } from "@/redux/slices/userSlice";
+import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 
 function sidebar() {
   const [toggle, setToggle] = useState(true);
@@ -35,8 +36,14 @@ function sidebar() {
           } text-3xl text-blue-950 transition-all duration-300 `}
         />
       </button>
-      <UserProfile toggle={toggle} data={items?.user} />
-      <SidebarData toggle={toggle} username={items?.user?.username} />
+      {loading ? (
+        <></>
+      ) : (
+        <>
+          <UserProfile toggle={toggle} data={items?.user} />
+          <SidebarData toggle={toggle} username={items?.user?.username} />
+        </>
+      )}
     </div>
   );
 }

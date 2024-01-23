@@ -10,7 +10,7 @@ datasource db {
 
 model budget {
   id            Int       @id @default(autoincrement())
-  familyID      Int
+  familyID      Int       @unique
   total_income  Float?    @default(0) @db.Float
   total_expense Float?    @default(0) @db.Float
   date_created  DateTime? @default(now()) @db.DateTime(0)
@@ -70,8 +70,8 @@ model income {
 
 model users {
   id                     Int                      @id @default(autoincrement())
-  username               String                   @db.VarChar(255)
-  email                  String                   @db.VarChar(255)
+  username               String                   @unique @db.VarChar(255)
+  email                  String                   @unique @db.VarChar(255)
   password               String                   @db.VarChar(255)
   bio                    String?                  @default("No bio yet !") @db.VarChar(255)
   role                   Int

@@ -44,7 +44,7 @@ function page() {
     },
     {
       name: "Total",
-      selector: (row) => "$ " + String(row.total),
+      selector: (row) => "$ " + String(row.total.toFixed(2)),
     },
     {
       name: "Date Created",
@@ -98,6 +98,7 @@ function page() {
   };
   useEffect(() => {
     fetchData();
+    document.title = "Create new Saving Goal";
   }, []);
   useEffect(() => {
     dispatch(fetchDataFromDB());
@@ -142,7 +143,7 @@ function page() {
           <button
             className="bg-blue-950 hover:bg-blue-600 ease-out h-fit duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-sm flex flex-row items-center gap-2 justify-center"
             onClick={() => {
-              window.open(`/savings/add`, "_blank");
+              window.open(`/savings/contributions/new`, "_blank");
             }}
           >
             <span className="flex-1">Create a contribution</span>

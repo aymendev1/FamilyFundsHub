@@ -35,7 +35,7 @@ function page() {
     },
     {
       name: "Total",
-      selector: (row) => "$ " + String(row.Total),
+      selector: (row) => "$ " + String(row.Total.toFixed(2)),
     },
     {
       name: "Date",
@@ -83,6 +83,7 @@ function page() {
   };
   useEffect(() => {
     fetchData();
+    document.title = "Expenses";
   }, []);
   return Loading ? (
     <ComponentLoader />

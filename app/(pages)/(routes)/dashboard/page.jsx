@@ -132,7 +132,7 @@ function page() {
           </div>
         </div>
         {/* FamilyChart */}
-        <FamilyChartCard />
+        <FamilyChartCard data={items?.familyMembers} />
       </div>
       <div className="flex bg-white rounded-lg mt-8 max-lg:mt-5 flex-col p-4 gap-2  max-lg:flex-col">
         <span className="text-xl  font-black  text-blue-950">
