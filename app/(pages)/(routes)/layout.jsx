@@ -1,16 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
 import Sidebar from "../../components/sidebar/sidebar";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { store } from "@/redux/store";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 function layout({ children }) {
-  const router = useRouter();
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {

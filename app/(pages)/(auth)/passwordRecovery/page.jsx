@@ -1,37 +1,54 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
 import { TbFaceIdError } from "react-icons/tb";
 import { ScaleLoader } from "react-spinners";
-import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
 function page() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState({ email: "", password: "" });
-  const handleLogin = async (e) => {
+  const [email, setEmail] = useState("");
+  const handleEmailSend = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(false);
-    const login = await signIn("credentials", { ...data, redirect: false });
-    if (login.status !== 200) {
+    await fetch("/api/passwordRecovery", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+      }),
+    }).then(async (res) => {
       setLoading(false);
-      setError(true);
-    }
-  };
-  const handleLoginGoogle = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(false);
-    try {
-      const login = await signIn("google", { redirect: false });
-      if (login.status !== 200) {
-        setLoading(false);
+      if (res.status === 200) {
+        toast.success("Email sent successfully !", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
         setError(true);
+        setLoading(false);
+        const error = await res.json();
+        toast.error(error.error, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
-    } catch (e) {
-      console.log(e);
-    }
+    });
   };
   return (
     <>
@@ -44,13 +61,13 @@ function page() {
           Hey, hello 👋
         </span>
         <span className="text-base text-slate-500">
-          Enter your login credentials you created while registering .
+          Enter your email to proceed with your password recovery.
         </span>
       </div>
       {/* Form */}
       <form
         className="space-y-6  py-6 lg:w-full md:w-full ms:w-full "
-        onSubmit={handleLogin}
+        onSubmit={handleEmailSend}
         method="POST"
       >
         <div>
@@ -66,41 +83,10 @@ function page() {
               name="email"
               type="email"
               autoComplete="email"
-              value={data.email}
-              onChange={(e) => setData({ ...data, email: e.target.value })}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center justify-between">
-            <label
-              htmlFor="password"
-              className="block text-sm font-bold leading-6 text-blue-950"
-            >
-              Password
-            </label>
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-semibold text-blue-600 hover:text-indigo-500"
-              >
-                Forgot password?
-              </a>
-            </div>
-          </div>
-          <div className="mt-2">
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              value={data.password}
-              onChange={(e) => setData({ ...data, password: e.target.value })}
-              required
-              className="block w-full rounded-md px-2 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
         </div>
@@ -119,7 +105,7 @@ function page() {
             type="submit"
             className="flex w-full justify-center rounded-md bg-gradient-to-r from-purple-500 from-10% via-30% to-90% to-sky-500 via-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Sign in
+            Send Email
           </button>
         </div>
       </form>
@@ -128,13 +114,6 @@ function page() {
         <span className="text-base text-gray-600"> or</span>
         <hr className="w-2/5" />
       </div>
-      <button
-        onClick={handleLoginGoogle}
-        className="flex w-full justify-center gap-2 items-center rounded-md ring-1 ring-inset ring-gray-300 bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-blue-950 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-      >
-        <FcGoogle className="h-7 w-7" />
-        Sign in or Register with Google
-      </button>
       <div className=" flex flex-col items-center w-full justify-between ">
         <span className="text-base text-slate-500">
           You don't have an account yet ?{" "}

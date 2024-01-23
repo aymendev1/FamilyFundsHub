@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { FaTrashAlt } from "react-icons/fa";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function EditProfile() {
   const [newProfilePicture, setNewProfilePicture] = useState();
