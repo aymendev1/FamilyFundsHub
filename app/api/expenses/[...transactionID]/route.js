@@ -12,7 +12,7 @@ async function getStats(req, context) {
     try {
       // We export the Stats from DB based on the UserID from the session :
       const Details =
-        await prisma.$queryRaw`SELECT expenses.ExpenseID, expenses.Description, expenses.isTransfer, expenses.receiver_id, expenses.Date_created, expenses.Total, expensecategories.CategoryName AS category, expenses.UserID, CASE WHEN expenses.isTransfer = true THEN users.name ELSE NULL END AS transferUserName, CASE WHEN expenses.isTransfer = true THEN users.profilePicture ELSE NULL END AS transferUserProfilePicture, CASE WHEN expenses.isTransfer = 1 THEN users.address ELSE NULL END AS transferUserAddress FROM expenses INNER JOIN expensecategories ON expenses.CategoryID = expensecategories.CategoryID LEFT JOIN users ON expenses.receiver_id = users.id WHERE expenses.ExpenseID = ${Number(
+        await prisma.$queryRaw`SELECT expenses.ExpenseID, expenses.Description, expenses.isTransfer, expenses.receiver_id, expenses.Date_created, expenses.Total, expensecategories.CategoryName AS category, expenses.UserID, CASE WHEN expenses.isTransfer = 1 THEN users.name ELSE NULL END AS transferUserName, CASE WHEN expenses.isTransfer = true THEN users.profilePicture ELSE NULL END AS transferUserProfilePicture, CASE WHEN expenses.isTransfer = 1 THEN users.address ELSE NULL END AS transferUserAddress FROM expenses INNER JOIN expensecategories ON expenses.CategoryID = expensecategories.CategoryID LEFT JOIN users ON expenses.receiver_id = users.id WHERE expenses.ExpenseID = ${Number(
           transactionID
         )}`;
       if (Number(session.user.id) !== Details[0].UserID) {
@@ -40,6 +40,8 @@ async function getStats(req, context) {
           status: 500,
         }
       );
+    } finally {
+      await prisma.$disconnect();
     }
   }
   return NextResponse.json(

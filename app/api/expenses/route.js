@@ -32,13 +32,13 @@ SELECT expenses.ExpenseID, expenses.Description,expenses.Date_created,expenses.T
         {
           error:
             "Oops! Something went wrong on our end. Please try again later",
+          info: error.message,
         },
         {
           status: 500,
         }
       );
     } finally {
-      // Disconnect from the Prisma client when done
       await prisma.$disconnect();
     }
   }
@@ -92,11 +92,14 @@ async function CreateExpense(req) {
         {
           error:
             "Oops! Something went wrong on our end. Please try again later",
+          info: error.message,
         },
         {
           status: 500,
         }
       );
+    } finally {
+      await prisma.$disconnect();
     }
   }
   return NextResponse.json(

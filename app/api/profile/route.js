@@ -44,6 +44,8 @@ async function getUserProfile() {
           status: 500,
         }
       );
+    } finally {
+      await prisma.$disconnect();
     }
   }
   return NextResponse.json(
@@ -81,10 +83,10 @@ async function UpdateProfile(req) {
   if (session) {
     try {
       //we check if username or email is already user by another member
-      const checkingusername = await prisma.users.findFirst({
+      const checkingUsername = await prisma.users.findFirst({
         where: { OR: [{ username: username }, { email: email }] },
       });
-      if (checkingusername && checkingusername.id !== session.user.id) {
+      if (checkingUsername && checkingUsername.id !== session.user.id) {
         return NextResponse.json(
           {
             error: "Username or email is already in use ",
@@ -95,16 +97,16 @@ async function UpdateProfile(req) {
         );
       }
 
-      const coverpic = Buffer.from(newCoverPicture, "base64");
+      const coverPic = Buffer.from(newCoverPicture, "base64");
 
-      const Profilepic = Buffer.from(newProfilePicture, "base64");
+      const ProfilePic = Buffer.from(newProfilePicture, "base64");
 
       // We create the expense for the sender
       const user = await prisma.users.update({
         where: { id: Number(session.user.id) },
         data: {
-          coverPicture: coverpic,
-          profilePicture: Profilepic,
+          coverPicture: coverPic,
+          profilePicture: ProfilePic,
           bio: bio,
           username: username,
           email: email,
@@ -120,11 +122,14 @@ async function UpdateProfile(req) {
         {
           error:
             "Oops! Something went wrong on our end. Please try again later",
+          Details: error,
         },
         {
           status: 500,
         }
       );
+    } finally {
+      await prisma.$disconnect();
     }
   }
   return NextResponse.json(

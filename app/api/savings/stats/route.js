@@ -53,6 +53,8 @@ ORDER BY
           status: 500,
         }
       );
+    } finally {
+      await prisma.$disconnect();
     }
   }
   return NextResponse.json(

@@ -59,11 +59,14 @@ async function RegisterUser(req) {
     return NextResponse.json(
       {
         error: "Oops! Something went wrong on our end. Please try again later",
+        info: error.message,
       },
       {
         status: 500,
       }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }
 async function UpdatePass(req) {
@@ -88,16 +91,16 @@ async function UpdatePass(req) {
           password: true,
         },
       });
-      console.log(userPass);
       //we check if username or email is already user by another member
       const passwordMatch = await bcrypt.compare(oldPass, userPass.password);
-      console.log(passwordMatch);
+
       if (passwordMatch) {
         const hashedPassword = await bcrypt.hash(newPass, 10);
         const user = await prisma.users.update({
           where: { id: Number(session.user.id) },
           data: {
             password: hashedPassword,
+            date_updated: new Date(),
           },
         });
         return NextResponse.json(
@@ -115,13 +118,13 @@ async function UpdatePass(req) {
         {
           error:
             "Oops! Something went wrong on our end. Please try again later",
+          info: error.message,
         },
         {
           status: 500,
         }
       );
     } finally {
-      // Disconnect from the Prisma client when done
       await prisma.$disconnect();
     }
   }

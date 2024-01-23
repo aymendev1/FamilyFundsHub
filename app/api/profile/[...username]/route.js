@@ -53,6 +53,8 @@ async function getProfile(req, context) {
           status: 500,
         }
       );
+    } finally {
+      await prisma.$disconnect();
     }
   }
   return NextResponse.json(

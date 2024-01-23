@@ -14,6 +14,14 @@ SELECT users_savings.SavingID, users_savings.Description,users_savings.date_upda
         session.user.id
       )}
   `;
+      if (!Savings) {
+        return NextResponse.json(
+          { Savings },
+          {
+            status: 404,
+          }
+        );
+      }
       Savings.map((saving) => {
         saving.profilePicture = saving.profilePicture
           .toString("base64")
@@ -36,6 +44,8 @@ SELECT users_savings.SavingID, users_savings.Description,users_savings.date_upda
           status: 500,
         }
       );
+    } finally {
+      await prisma.$disconnect();
     }
   }
 
@@ -81,11 +91,14 @@ async function CreateSavingGoal(req) {
         {
           error:
             "Oops! Something went wrong on our end. Please try again later",
+          info: error.message,
         },
         {
           status: 500,
         }
       );
+    } finally {
+      await prisma.$disconnect();
     }
   }
   return NextResponse.json(

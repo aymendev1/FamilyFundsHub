@@ -27,11 +27,14 @@ SELECT expenses.UserID, expensecategories.CategoryName, SUM(CASE WHEN expenses.C
         {
           error:
             "Oops! Something went wrong on our end. Please try again later",
+          info: error.message,
         },
         {
           status: 500,
         }
       );
+    } finally {
+      await prisma.$disconnect();
     }
   }
 

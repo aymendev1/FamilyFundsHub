@@ -33,11 +33,6 @@ async function getStats(req, context) {
           },
         },
       });
-      SavingDetails.map((saving) => {
-        saving.profilePicture = saving.profilePicture
-          .toString("base64")
-          .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
-      });
       if (!SavingDetails) {
         return NextResponse.json(
           {
@@ -48,6 +43,10 @@ async function getStats(req, context) {
           }
         );
       }
+      SavingDetails.users.profilePicture = SavingDetails.users.profilePicture
+        .toString("base64")
+        .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
+
       if (Number(session.user.id) !== SavingDetails.UserID) {
         return NextResponse.json(
           {
@@ -104,6 +103,8 @@ async function getStats(req, context) {
           status: 500,
         }
       );
+    } finally {
+      await prisma.$disconnect();
     }
   }
   return NextResponse.json(
