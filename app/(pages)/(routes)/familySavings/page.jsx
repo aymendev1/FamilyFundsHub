@@ -15,7 +15,6 @@ function page() {
   const [monthlyStats, setMonthlyStats] = useState([]);
   const [LatestSavings, setLatestSavings] = useState([]);
   const [SavingsGoals, setSavingsGoals] = useState([]);
-
   const dispatch = useDispatch();
   // Table's Column
   const columns = [
@@ -62,7 +61,7 @@ function page() {
           className="bg-blue-950 hover:bg-blue-600 ease-out duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-sm flex flex-row items-center gap-2 justify-center"
           onClick={() => {
             window.open(
-              `/savings/contributions/${row.SavingsHistoryID}`,
+              `/familySavings/contributions/${row.SavingsHistoryID}`,
               "_blank"
             );
           }}
@@ -78,18 +77,24 @@ function page() {
     try {
       setLoading(true);
       // Monthly Stats
-      await fetch("/api/savings/stats", { method: "GET" }).then(async (res) => {
-        const data = await res.json();
-        setMonthlyStats(data);
-      });
-      await fetch("/api/savings/", { method: "GET" }).then(async (res) => {
-        const data = await res.json();
-        setLatestSavings(data.Savings);
-      });
-      await fetch("/api/savings/goal", { method: "GET" }).then(async (res) => {
-        const data = await res.json();
-        setSavingsGoals(data.Savings);
-      });
+      await fetch("/api/familySavings/stats", { method: "GET" }).then(
+        async (res) => {
+          const data = await res.json();
+          setMonthlyStats(data);
+        }
+      );
+      await fetch("/api/familySavings/", { method: "GET" }).then(
+        async (res) => {
+          const data = await res.json();
+          setLatestSavings(data.Savings);
+        }
+      );
+      await fetch("/api/familySavings/goal", { method: "GET" }).then(
+        async (res) => {
+          const data = await res.json();
+          setSavingsGoals(data.Savings);
+        }
+      );
 
       setLoading(false);
     } catch (e) {
@@ -98,7 +103,7 @@ function page() {
   };
   useEffect(() => {
     fetchData();
-    document.title = "Create new Saving Goal";
+    document.title = "Family Savings";
   }, []);
   useEffect(() => {
     dispatch(fetchDataFromDB());
@@ -108,7 +113,9 @@ function page() {
   ) : (
     <>
       <div className=" pb-5">
-        <span className="text-3xl  font-black  text-blue-950 ">Savings</span>
+        <span className="text-3xl  font-black  text-blue-950 ">
+          Family Savings
+        </span>
       </div>
       <div className="flex  flex-row  gap-10 w-full max-lg:flex-col">
         <div className="flex flex-col gap-10 w-[60%] px-2 max-lg:w-full">
@@ -121,14 +128,16 @@ function page() {
               <span className="text-xl  font-black  text-blue-950">
                 Overview
               </span>
-              <span className="text-md  text-slate-700">Monthly Savings</span>
+              <span className="text-md  text-slate-700">
+                Monthly family savings
+              </span>
             </div>
             <div className="w-[full] h-[300px] ">
               <OverviewChartDashboard data={monthlyStats} />
             </div>
           </div>
         </div>
-        <SavingsCategories data={SavingsGoals} isFamily={false} />
+        <SavingsCategories data={SavingsGoals} isFamily={true} />
       </div>
       <div className="flex bg-white rounded-lg mt-8 flex-col p-4 gap-2  max-lg:flex-col">
         <div className="flex flex-row justify-between gap-2 w-full">
@@ -137,13 +146,13 @@ function page() {
               Latest Savings Contributions
             </span>
             <span className="text-md text-slate-700">
-              Your contributions history
+              Your family's contributions history
             </span>
           </div>
           <button
             className="bg-blue-950 hover:bg-blue-600 ease-out h-fit duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-sm flex flex-row items-center gap-2 justify-center"
             onClick={() => {
-              window.open(`/savings/contributions/new`, "_blank");
+              window.open(`/familySavings/contributions/new`, "_blank");
             }}
           >
             <span className="flex-1">Create a contribution</span>

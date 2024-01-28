@@ -4,8 +4,8 @@ import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import LatestTransactionsTable from "../tables/LatestTransactionsTable";
 import { BsShieldLockFill } from "react-icons/bs";
 
-function TransactionDetailsCard(props) {
-  const { id } = props;
+export default function SavingsDetailsCard(props) {
+  const { id, isFamily } = props;
   const [Loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [SavingInfo, setSavingInfo] = useState([]);
@@ -34,12 +34,50 @@ function TransactionDetailsCard(props) {
         }),
     },
   ];
+  const familyColumn = [
+    {
+      name: "Preformed By",
+      selector: (row) => (
+        <div className="flex flex-row gap-2 items-center">
+          <img
+            src={row.users.profilePicture || "/fatherDefaultPP.jpg"}
+            className="rounded-lg h-10 w-10
+             object-cover"
+            alt={`${row.users.name} Profile Picture`}
+          />
+          <span className="font-black">{row.users.name}</span>
+        </div>
+      ),
+    },
+    {
+      name: "Description",
+      selector: (row) => row.Description,
+      grow: 2,
+    },
+    {
+      name: "Status",
+      selector: (row) => row.Status,
+    },
+    {
+      name: "Total",
+      selector: (row) => "$ " + String(row.total.toFixed(2)),
+    },
+    {
+      name: "Date",
+      selector: (row) =>
+        new Date(row.date_created).toLocaleDateString("default", {
+          month: "long",
+          year: "numeric",
+          day: "2-digit",
+        }),
+    },
+  ];
   // We import Monthly Stats and Latest Items From API
   const fetchData = async () => {
     try {
       setLoading(true);
       // Monthly Stats
-      await fetch(`/api/savings/goal/${id}`, {
+      await fetch(`/api/${isFamily ? "familySavings" : "savings"}/goal/${id}`, {
         method: "GET",
       }).then(async (res) => {
         if (res.status === 200) {
@@ -72,7 +110,9 @@ function TransactionDetailsCard(props) {
     <ComponentLoader />
   ) : (
     <div className="bg-white rounded-lg p-4 w-full flex flex-col gap-2">
-      <span className="text-xl  font-black  text-blue-950">Saving Details</span>
+      <span className="text-xl  font-black  text-blue-950">
+        {isFamily ? "Family saving details" : "Savings details"}
+      </span>
       <span className="text-md text-slate-600 border-b border-gray-900/10 pb-1.5">
         Reference # {id}
       </span>
@@ -182,12 +222,18 @@ function TransactionDetailsCard(props) {
                   )}
                 </span>
               </div>
-              <div className="flex flex-col gap-2">
-                <span className="text-sm  text-slate-700">Preformed by :</span>
-                <span className="text-sm text-slate-950 font-black bigText ">
-                  {SavingInfo?.users?.name}
-                </span>
-              </div>
+              {isFamily ? (
+                <></>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm  text-slate-700">
+                    Preformed by :
+                  </span>
+                  <span className="text-sm text-slate-950 font-black bigText ">
+                    {SavingInfo?.users?.name}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           <div className="pt-5">
@@ -196,11 +242,14 @@ function TransactionDetailsCard(props) {
               History
             </span>
             {/*Table component to be edited when data is ready  */}
-            <LatestTransactionsTable data={SavingHistory} columns={columns} />
+            <LatestTransactionsTable
+              data={SavingHistory}
+              columns={isFamily ? familyColumn : columns}
+            />
           </div>
           <div className="bg-slate-200 rounded-lg w-full p-4 self-end mt-5">
             <span className="text-sm  text-slate-700 font-black">
-              Note : This transfer is only virtual and not yet supported in real
+              Note : This data is only virtual and not yet supported in real
               life
             </span>
           </div>
@@ -209,5 +258,3 @@ function TransactionDetailsCard(props) {
     </div>
   );
 }
-
-export default TransactionDetailsCard;

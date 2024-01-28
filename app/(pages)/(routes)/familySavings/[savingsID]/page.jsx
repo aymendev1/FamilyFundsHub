@@ -13,7 +13,7 @@ function page({ params }) {
   const { items, loading, error } = useSelector((state) => state.userData);
   useEffect(() => {
     dispatch(fetchDataFromDB());
-    document.title = `Saving Goal #${savingsID}`;
+    document.title = `Family Saving Goal #${savingsID}`;
   }, [dispatch]);
   return loading ? (
     <ComponentLoader />
@@ -25,7 +25,7 @@ function page({ params }) {
         <SavingsDetailsCard
           id={savingsID}
           userDetails={items?.user}
-          isFamily={false}
+          isFamily={true}
         />
         <div className="flex flex-col gap-10 w-[30%]  max-md:gap-6 max-sm:gap-4 max-md:flex-row max-md:w-full">
           <TotalBalanceCard data={items?.userBudget} />

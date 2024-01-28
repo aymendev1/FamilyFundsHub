@@ -5,12 +5,12 @@ import { FiArrowUpRight } from "react-icons/fi";
 function ActionMenu() {
   const router = useRouter();
   const MenuList = [
-    { title: "Add Expense", link: "/transactions/new" },
-    { title: "View 02", link: "/link02" },
-    { title: "View 03", link: "/link02" },
-    { title: "View 04", link: "/link02" },
-    { title: "View 05", link: "/link02" },
-    { title: "View 06", link: "/link02" },
+    { title: "Add expense", link: "/transactions/new" },
+    { title: "View transactions", link: "/transactions" },
+    { title: "Savings History", link: "/savings/history" },
+    { title: "Create saving goal", link: "/savings/new" },
+    { title: "Add saving contribution", link: "/contributions/new" },
+    { title: "Edit your profile", link: "/profile/edit" },
   ];
   return (
     <div className="flex flex-col gap-4 w-[30%] h-full max-lg:w-full  bg-white rounded-lg p-4">

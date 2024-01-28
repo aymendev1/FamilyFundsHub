@@ -1,0 +1,67 @@
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/(auth)/auth/[...nextauth]/route";
+const prisma = new PrismaClient();
+async function getStats() {
+  // Check if User is authenticated and eligible
+  const session = await getServerSession(authOptions);
+  if (session && session.user.role === 0) {
+    try {
+      // We export the Stats from DB based on the UserID from the session :
+      const Stats = await prisma.$queryRaw`
+    SELECT UserID,familyID,
+DATE_FORMAT(Date_created, '%Y-%m') AS month,
+SUM(Total) AS monthly_savings
+FROM
+family_savings_history
+WHERE familyID=${Number(session.user.familyId)}
+GROUP BY
+UserID, month
+ORDER BY
+    month DESC;
+  `;
+      const Months = [];
+      const stats = [];
+      Stats.map((item) => {
+        // We convert Date to text MM-YYYY format
+        const date = new Date(item.month);
+        const month = date.toLocaleString("default", {
+          month: "long",
+          year: "numeric",
+        });
+        Months.push(month);
+        stats.push(item.monthly_savings);
+      });
+
+      return NextResponse.json(
+        { Months, stats },
+        {
+          status: 200,
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      return NextResponse.json(
+        {
+          error:
+            "Oops! Something went wrong on our end. Please try again later",
+        },
+        {
+          status: 500,
+        }
+      );
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+  return NextResponse.json(
+    {
+      error: "Access Restricted ",
+    },
+    {
+      status: 403,
+    }
+  );
+}
+export { getStats as GET };

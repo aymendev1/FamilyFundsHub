@@ -14,7 +14,7 @@ function RecentSavings(props) {
         {/* Max 8 items */}
         {data?.map((item, i) => {
           return (
-            <div key={i} className="flex flex-row gap-4 items-center ">
+            <div key={i} className="flex flex-row gap-4 items-center  ">
               <div className="w-[40px] h-[40px] rounded-lg bg-blue-100 flex items-center justify-center">
                 <MdSavings className="text-blue-950 h-[20px] w-[20px]" />
               </div>

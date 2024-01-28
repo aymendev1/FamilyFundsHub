@@ -16,7 +16,7 @@ function StatsCardEarning(props) {
             Income This Month
           </span>
           <span className="text-2xl text-emerald-950 font-black bigText ">
-            $ {Number(data?.incomeThisMonth).toLocaleString()}
+            $ {Number(data?.incomeThisMonth).toFixed(2).toLocaleString()}
           </span>
         </div>
       </div>
@@ -28,10 +28,10 @@ function StatsCardEarning(props) {
         {/* Text */}
         <div className="flex flex-col gap-1  xl:gap-1 justify-center">
           <span className="text-md font-semibold text-violet-950">
-            Earning This Month
+            Spent This Month
           </span>
           <span className="text-2xl text-violet-950 font-black bigText ">
-            $ {Number(data?.ExpenseThisMonth).toLocaleString()}
+            $ {Number(data?.ExpenseThisMonth).toFixed(2).toLocaleString()}
           </span>
         </div>
       </div>

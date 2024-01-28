@@ -3,8 +3,20 @@ import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/(auth)/auth/[...nextauth]/route";
+import fs from "fs";
+import path from "path";
 const prisma = new PrismaClient();
+function EncodingPicture(imagePath) {
+  // Step 1: Read the image file as a buffer
+  const imageBuffer = fs.readFileSync(imagePath);
 
+  // Step 2: Encode the buffer to base64
+  const base64Encoded =
+    "data:image/jpeg;base64," + imageBuffer.toString("base64");
+  // Step 3: Convert the base64-encoded string back to a buffer
+  const decodedBuffer = Buffer.from(base64Encoded, "base64");
+  return decodedBuffer;
+}
 async function RegisterUser(req) {
   const body = await req.json();
   const { name, email, password, username, role } = body;
@@ -42,8 +54,14 @@ async function RegisterUser(req) {
         }
       );
     }
+
     // We hash teh password
     const hashedPassword = await bcrypt.hash(password, 10);
+    const PProfilePath = path.join(process.cwd(), "public/boyDefaultPP.jpg");
+    const PPBuffer = EncodingPicture(PProfilePath);
+    const CoverPath = path.join(process.cwd(), "public/defaultCover.jpg");
+    const CoverBuffer = EncodingPicture(CoverPath);
+
     const user = await prisma.users.create({
       data: {
         name: name,
@@ -51,6 +69,8 @@ async function RegisterUser(req) {
         password: hashedPassword,
         username: username,
         role: role,
+        profilePicture: PPBuffer,
+        coverPicture: CoverBuffer,
       },
     });
     return NextResponse.json(user, { status: 200 });
@@ -68,6 +88,59 @@ async function RegisterUser(req) {
   } finally {
     await prisma.$disconnect();
   }
+}
+async function CreateFamily(req) {
+  const session = await getServerSession(authOptions);
+  const body = await req.json();
+  const { name } = body;
+  if (!name) {
+    return NextResponse.json(
+      { error: "Please fill out all required fields." },
+      {
+        status: 400,
+      }
+    );
+  }
+  if (session) {
+    try {
+      //we Create a new Family and we update the family Column in user Table
+      const newFamily = await prisma.family.create({
+        data: { familyName: name },
+      });
+      const user = await prisma.users.update({
+        where: { id: Number(session.user.id) },
+        data: {
+          familyID: newFamily.id,
+          role: 0,
+          date_updated: new Date(),
+        },
+      });
+
+      return NextResponse.json({ id: newFamily.id }, { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return NextResponse.json(
+        {
+          error:
+            "Oops! Something went wrong on our end. Please try again later",
+          Details: error,
+        },
+        {
+          status: 500,
+        }
+      );
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+  return NextResponse.json(
+    {
+      error: "User Not Authenticated",
+    },
+    {
+      status: 401,
+    }
+  );
 }
 async function UpdatePass(req) {
   const body = await req.json();
@@ -137,4 +210,4 @@ async function UpdatePass(req) {
     }
   );
 }
-export { RegisterUser as POST, UpdatePass as PUT };
+export { RegisterUser as POST, UpdatePass as PUT, CreateFamily as PATCH };

@@ -3,7 +3,8 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { SyncLoader } from "react-spinners";
 import "react-toastify/dist/ReactToastify.css";
-export default function NewSavingsForm() {
+export default function NewSavingsForm(props) {
+  const { isFamily } = props;
   const [Description, setDescription] = useState("");
   const [Total, setTotal] = useState("");
   const [Status, setStatus] = useState("");
@@ -13,7 +14,7 @@ export default function NewSavingsForm() {
   const CreateSavings = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await fetch("/api/savings/goal", {
+    await fetch(`/api/${isFamily ? "familySavings" : "savings"}/goal`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,12 +35,16 @@ export default function NewSavingsForm() {
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
           progress: undefined,
           theme: "light",
         });
-        window.location.replace(`/savings/${data.SavingGoal.SavingID}`);
+        window.location.replace(
+          `/${isFamily ? "familySavings" : "savings"}/${
+            data.SavingGoal.SavingID
+          }`
+        );
       } else {
         setLoading(false);
         const error = await res.json();

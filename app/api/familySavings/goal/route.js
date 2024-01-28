@@ -3,22 +3,23 @@ import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/(auth)/auth/[...nextauth]/route";
 const prisma = new PrismaClient();
-
-async function getSavings() {
+async function getSavingGoals() {
   // Check if User is authenticated and eligible
   const session = await getServerSession(authOptions);
-  if (session) {
+  if (session && session.user.role === 0) {
     try {
       // We export the Stats from DB based on the UserID from the session :
-      const Savings = await prisma.$queryRaw`
-SELECT users_savings_history.SavingsHistoryID, users_savings_history.Description, users_savings_history.date_created, users_savings_history.total, users_savings_history.Status, users.name, users.profilePicture, users_savings.Description AS SavingName FROM users_savings_history INNER JOIN users ON users_savings_history.UserID = users.id INNER JOIN users_savings ON users_savings.SavingID = users_savings_history.SavingID WHERE users_savings_history.UserID = ${session.user.id} ORDER BY users_savings_history.date_created DESC
-  `;
-      Savings.map((saving) => {
-        saving.profilePicture = saving.profilePicture
-          .toString("base64")
-          .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
+      const Savings = await prisma.family_savings.findMany({
+        where: { FamilyID: session.user.familyId },
       });
-
+      if (!Savings) {
+        return NextResponse.json(
+          { Savings },
+          {
+            status: 404,
+          }
+        );
+      }
       return NextResponse.json(
         { Savings },
         {
@@ -50,12 +51,11 @@ SELECT users_savings_history.SavingsHistoryID, users_savings_history.Description
     }
   );
 }
-async function CreateSavingContr(req) {
+async function CreateSavingGoal(req) {
   const body = await req.json();
   const session = await getServerSession(authOptions);
-
-  const { SavingGoal, Total, Description, Status } = body;
-  if (!SavingGoal || !Total || !Description || !Status) {
+  const { Status, Total, Description, StartDate, EndDate } = body;
+  if (!Status || !Total || !Description || !StartDate || !EndDate) {
     return NextResponse.json(
       { error: "Please fill out all required fields." },
       {
@@ -64,31 +64,20 @@ async function CreateSavingContr(req) {
     );
   }
   // We check if the user is Authenticated
-  if (session) {
+  if (session && session.user.role === 0) {
     try {
-      // We create the saving data for the sender
-      const contribution = await prisma.users_savings_history.create({
+      // We create the expense for the sender
+      const SavingGoal = await prisma.family_savings.create({
         data: {
-          UserID: Number(session.user.id),
-          SavingID: Number(SavingGoal),
+          FamilyID: Number(session.user.familyId),
           Description: Description,
-          Status: Status,
           total: parseFloat(Total),
+          date_start: new Date(StartDate),
+          date_end: new Date(EndDate),
+          Status: Status,
         },
       });
-      const updateSavingGoal = await prisma.users_savings.update({
-        where: { SavingID: Number(SavingGoal) },
-        data: { date_updated: new Date() },
-      });
-      // We Dedicate the money from to the sender  Balance
-      const updateUserBalance = await prisma.users.update({
-        where: { id: Number(session.user.id) },
-        data: { balance: { decrement: parseFloat(Total) } },
-      });
-      return NextResponse.json(
-        { id: contribution.SavingsHistoryID },
-        { status: 200 }
-      );
+      return NextResponse.json({ SavingGoal }, { status: 200 });
     } catch (error) {
       console.error(error);
       return NextResponse.json(
@@ -114,4 +103,4 @@ async function CreateSavingContr(req) {
     }
   );
 }
-export { getSavings as GET, CreateSavingContr as POST };
+export { getSavingGoals as GET, CreateSavingGoal as POST };

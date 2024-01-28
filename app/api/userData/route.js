@@ -83,7 +83,9 @@ async function getUser() {
         incomeThisMonth: 0,
         ExpenseThisMonth: 0,
         UserBudget: user.balance,
-        UserSavingLastMonth: UserSavingLastMonth[0]?._sum,
+        UserSavingLastMonth: UserSavingLastMonth[0]
+          ? UserSavingLastMonth[0]?._sum
+          : 0,
       };
       const userIncome = await prisma.income.findMany({
         where: {

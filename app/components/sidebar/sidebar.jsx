@@ -5,7 +5,6 @@ import SidebarData from "./sidebarData";
 import { BiChevronLeft } from "react-icons/bi";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchDataFromDB } from "@/redux/slices/userSlice";
-import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 
 function sidebar() {
   const [toggle, setToggle] = useState(true);

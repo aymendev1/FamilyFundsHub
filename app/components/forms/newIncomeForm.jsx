@@ -5,15 +5,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { SyncLoader } from "react-spinners";
 
 export default function NewContributionForm(props) {
-  const { userSavingGoal, isFamily } = props;
+  const { userIncomeGoal, isFamily } = props;
   const [Description, setDescription] = useState("");
   const [Total, setTotal] = useState("");
-  const [SavingGoal, setSavingGoal] = useState("");
   const [Loading, setLoading] = useState(false);
-  const CreateSavings = async (e) => {
+  const CreateIncome = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await fetch(`/api/${isFamily ? "familySavings" : "savings"}/`, {
+    await fetch(`/api/income/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,14 +20,12 @@ export default function NewContributionForm(props) {
       body: JSON.stringify({
         Description: Description,
         Total: Total,
-        SavingGoal: SavingGoal,
-        Status: "Added",
       }),
     }).then(async (res) => {
       setLoading(false);
       if (res.status === 200) {
         const data = await res.json();
-        toast.success("Contribution Added successfully !", {
+        toast.success("Income Added successfully !", {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
@@ -38,9 +35,7 @@ export default function NewContributionForm(props) {
           progress: undefined,
           theme: "light",
         });
-        window.location.replace(
-          `/${isFamily ? "familySavings" : "savings"}/contributions/${data.id}`
-        );
+        window.location.reload();
       } else {
         setLoading(false);
         const error = await res.json();
@@ -61,12 +56,10 @@ export default function NewContributionForm(props) {
   return (
     <form
       action="POST"
-      onSubmit={CreateSavings}
+      onSubmit={CreateIncome}
       className="bg-white rounded-lg p-4 w-full flex flex-col gap-3"
     >
-      <span class="text-xl  font-black  text-blue-950">
-        Create a new contribution
-      </span>
+      <span class="text-xl  font-black  text-blue-950">Add new income</span>
       <span class="text-md text-slate-700 border-b border-gray-900/10 pb-4">
         Fill in the bellow formulary :
       </span>
@@ -81,10 +74,10 @@ export default function NewContributionForm(props) {
         />
       ) : (
         <>
-          <div className=" grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="col-span-full">
+          <div className=" flex flex-row  w-full justify-between gap-5">
+            <div className="w-full">
               <label
-                htmlFor="SavingDescription"
+                htmlFor="IncomeDescription"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Description
@@ -92,18 +85,18 @@ export default function NewContributionForm(props) {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="SavingDescription"
+                  name="IncomeDescription"
                   value={Description}
                   onChange={(e) => setDescription(e.target.value)}
-                  autoComplete="SavingDescription"
+                  autoComplete="IncomeDescription"
                   className="block w-full rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   required
                 />
               </div>
             </div>
-            <div className="sm:col-span-3">
+            <div className="w-full">
               <label
-                htmlFor="SavingTotal"
+                htmlFor="IncomeTotal"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Amount to be add :
@@ -111,40 +104,13 @@ export default function NewContributionForm(props) {
               <div className="mt-2">
                 <input
                   type="number"
-                  name="SavingTotal"
+                  name="IncomeTotal"
                   value={Total}
                   onChange={(e) => setTotal(e.target.value)}
-                  autoComplete="SavingTotal"
+                  autoComplete="IncomeTotal"
                   className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   required
                 />
-              </div>
-            </div>
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="SavingStatus"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Saving Goal
-              </label>
-              <div className="mt-2">
-                <select
-                  name="SavingGoal"
-                  id="SavingGoal"
-                  autoComplete="SavingGoal"
-                  value={SavingGoal}
-                  onChange={(e) => setSavingGoal(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  required
-                >
-                  {userSavingGoal?.map((item, i) => {
-                    return (
-                      <option key={i} value={item.SavingID}>
-                        {item.Description}
-                      </option>
-                    );
-                  })}
-                </select>
               </div>
             </div>
           </div>

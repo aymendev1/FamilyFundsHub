@@ -5,6 +5,7 @@ import {
   FaUsers,
   FaArrowRightFromBracket,
 } from "react-icons/fa6";
+import { FaUsers as FaUsers2 } from "react-icons/fa";
 import {
   MdSavings,
   MdAccountBalanceWallet,
@@ -19,6 +20,7 @@ function sidebarData(props) {
     { icon: MdHome, text: "Dashboard", link: "/dashboard" },
     { icon: MdAccountBalanceWallet, text: "Balance", link: "/balance" },
     { icon: MdSavings, text: "Savings", link: "/savings" },
+    { icon: FaUsers2, text: "Family Savings", link: "/familySavings" },
     { icon: FaMoneyBillTransfer, text: "Expenses", link: "/transactions" },
     { icon: FaUsers, text: "Profile", link: `/profile/${username}` },
     { icon: MdSettings, text: "Settings", link: "/settings" },

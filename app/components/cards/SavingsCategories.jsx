@@ -3,7 +3,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 import { MdSavings } from "react-icons/md";
 import React from "react";
 function SavingsCategories(props) {
-  const { data } = props;
+  const { data, isFamily } = props;
 
   return (
     <div className="w-[40%] rounded-lg bg-white flex flex-col gap-4 p-4">
@@ -16,7 +16,10 @@ function SavingsCategories(props) {
         <button
           className="bg-blue-950 hover:bg-blue-600 ease-out h-fit duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-sm flex flex-row items-center gap-2 justify-center"
           onClick={() => {
-            window.open(`/savings/goals`, "_blank");
+            window.open(
+              `/${isFamily ? "familySavings" : "savings"}/goals`,
+              "_blank"
+            );
           }}
         >
           <span className="flex-1">View all </span>
@@ -28,8 +31,13 @@ function SavingsCategories(props) {
           return (
             <div
               key={i}
-              className="flex flex-row gap-2 justify-between items-center  hover:rounded hover:cursor-pointer hover:bg-blue-50"
-              onClick={() => window.open(`/savings/${item.SavingID}`, "_blank")}
+              className="flex flex-row gap-2 justify-between items-center p-2 hover:rounded hover:cursor-pointer hover:bg-blue-50"
+              onClick={() =>
+                window.open(
+                  `/${isFamily ? "familySavings" : "savings"}/${item.SavingID}`,
+                  "_blank"
+                )
+              }
             >
               <div
                 className={`w-[40px] h-[40px] rounded-lg bg-indigo-100 flex items-center justify-center`}

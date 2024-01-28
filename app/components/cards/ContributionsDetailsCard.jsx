@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { BsShieldLockFill } from "react-icons/bs";
 export default function ContributionDetailsCard(props) {
-  const { id, userDetails } = props;
+  const { id, isFamily } = props;
   const [data, setData] = useState([]);
   const [Loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -13,7 +13,7 @@ export default function ContributionDetailsCard(props) {
     try {
       setLoading(true);
       // Monthly Stats
-      await fetch(`/api/savings/${id}`, {
+      await fetch(`/api/${isFamily ? "familySavings" : "savings"}/${id}`, {
         method: "GET",
       }).then(async (res) => {
         if (res.status === 200) {
@@ -40,7 +40,7 @@ export default function ContributionDetailsCard(props) {
   ) : (
     <div className="bg-white rounded-lg p-4 w-full flex flex-col gap-2">
       <span className="text-xl  font-black  text-blue-950">
-        Contribution Details
+        Family Contribution Details
       </span>
       <span className="text-md text-slate-600 border-b border-gray-900/10 pb-1.5">
         Reference # {id}
@@ -106,7 +106,8 @@ export default function ContributionDetailsCard(props) {
               <div className="flex flex-col gap-2">
                 <span className="text-sm  text-slate-700">Saving Goal </span>
                 <span className="text-sm text-slate-950 font-black bigText ">
-                  {data?.users_savings?.Description}
+                  {data?.users_savings?.Description ||
+                    data?.family_savings?.Description}
                 </span>
               </div>
             </div>
@@ -131,7 +132,7 @@ export default function ContributionDetailsCard(props) {
           </div>
           <div className="bg-slate-200 rounded-lg w-full p-4 self-end mt-5">
             <span className="text-sm  text-slate-700 font-black">
-              Note : This transfer is only virtual and not yet supported in real
+              Note : This data is only virtual and not yet supported in real
               life
             </span>
           </div>

@@ -13,8 +13,13 @@ function page() {
     e.preventDefault();
     setLoading(true);
     setError(false);
-    const login = await signIn("credentials", { ...data, redirect: false });
-    if (login.status !== 200) {
+    const login = await signIn("credentials", {
+      ...data,
+      redirect: false,
+    });
+    if (login.status === 200) {
+      window.location.replace("/dashboard");
+    } else {
       setLoading(false);
       setError(true);
     }
@@ -24,8 +29,12 @@ function page() {
     setLoading(true);
     setError(false);
     try {
-      const login = await signIn("google", { redirect: false });
-      if (login.status !== 200) {
+      await signIn("google", {
+        redirect: false,
+      });
+      if (login.status === 200) {
+        window.location.replace("/dashboard");
+      } else {
         setLoading(false);
         setError(true);
       }

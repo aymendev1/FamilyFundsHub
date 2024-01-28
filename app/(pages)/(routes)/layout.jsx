@@ -2,6 +2,7 @@
 import Sidebar from "../../components/sidebar/sidebar";
 import { useSession } from "next-auth/react";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
+import NewUserComponent from "@/app/components/newUser";
 import { store } from "@/redux/store";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
@@ -15,6 +16,8 @@ function layout({ children }) {
   });
   return !session ? (
     <ComponentLoader />
+  ) : session.user.familyId === null ? (
+    <NewUserComponent data={session.user} />
   ) : (
     <>
       <Provider store={store}>

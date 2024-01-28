@@ -31,6 +31,13 @@ export const authOptions = {
         //Check if email exists
         const user = await prisma.users.findUnique({
           where: { email: credentials.email },
+          select: {
+            email: true,
+            id: true,
+            password: true,
+            familyID: true,
+            role: true,
+          },
         });
         // In case User not found
         if (!user) {
@@ -91,12 +98,32 @@ export const authOptions = {
         }
         // In case user exists we return user
         return userExists;
+      } else if (account.provider === "credentials") {
+        return user;
       }
     },
   },
   callbacks: {
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user, trigger, session, profile, account }) {
       // In case of SignIn using Credentials
+      if (trigger === "update") {
+        return { ...token, ...session.user };
+      }
+      // if user, it means that the authentication was made via credentials
+      if (account?.provider === "google") {
+        //Let's check if user already exists
+        const userExists = await prisma.users.findUnique({
+          where: { email: profile.email },
+          select: { name: true, familyID: true, role: true, id: true },
+        });
+        // In case User not found, we create a new user
+        return {
+          ...token,
+          id: userExists.id,
+          familyId: userExists.familyID,
+          role: userExists.role,
+        };
+      }
       if (user) {
         // Passing necessary UserDetails into Token
         return {
@@ -106,39 +133,22 @@ export const authOptions = {
           role: user.role,
         };
       }
-      // In Case SignIn with Google
-      else if (
-        token?.picture?.includes("google") ||
-        token?.email?.includes("gmail")
-      ) {
-        // We search for user in DB
-        const userExists = await prisma.users.findUnique({
-          where: { email: token.email },
-        });
-        return {
-          ...token,
-          id: userExists.id,
-          familyId: userExists.familyID,
-          role: userExists.role,
-        };
-      }
+
       return token;
     },
     async session({ token, user, session }) {
       // Passing necessary UserDetails into Session
-
       return {
         ...session,
         user: {
           ...session.user,
           id: token.id,
-          familyId: token.familyID,
+          familyId: token.familyId,
           role: token.role,
         },
       };
     },
   },
-  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);

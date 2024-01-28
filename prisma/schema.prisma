@@ -46,13 +46,15 @@ model expenses {
 }
 
 model family {
-  id             Int              @id @default(autoincrement())
-  familyName     String           @db.VarChar(255)
-  date_created   DateTime?        @default(now()) @db.DateTime(0)
-  date_updated   DateTime?        @default(now()) @db.DateTime(0)
-  budget         budget[]
-  family_savings family_savings[]
-  users          users[]
+  id                  Int              @id @default(autoincrement())
+  familyName          String           @db.VarChar(255)
+  date_created        DateTime?        @default(now()) @db.DateTime(0)
+  date_updated        DateTime?        @default(now()) @db.DateTime(0)
+  invite_token        String?          @db.MediumText
+  invite_token_expiry DateTime?        @db.Date
+  budget              budget[]
+  family_savings      family_savings[]
+  users               users[]
 }
 
 model income {
@@ -81,7 +83,7 @@ model users {
   name                   String?                  @db.Text
   profilePicture         Bytes
   balance                Float                    @default(0) @db.Float
-  address                String                   @db.Text
+  address                String?                  @default("No Address Yet !") @db.VarChar(55)
   coverPicture           Bytes
   reset_token            String?                  @db.MediumText
   reset_token_expiry     DateTime?                @db.Date
@@ -119,6 +121,7 @@ model family_savings_history {
   total            Float?         @db.Float
   Status           String?        @db.VarChar(255)
   Description      String?        @db.VarChar(255)
+  familyID         Int
   family_savings   family_savings @relation(fields: [SavingID], references: [SavingID], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_history_ibfk_1")
   users            users          @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_history_ibfk_2")
 

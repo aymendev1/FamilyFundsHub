@@ -8,20 +8,18 @@ function SavingsCardLastMonth(props) {
       <div className="flex flex-col flex-1 gap-3">
         <span
           className={`text-xl  font-black ${
-            UserSavingLastMonth?.total === 0
-              ? "text-red-800"
-              : "text-emerald-800"
+            !UserSavingLastMonth?.total ? "text-red-800" : "text-emerald-800"
           } `}
         >
-          {UserSavingLastMonth?.total === 0 ? "Oups :(" : "Congratulations !"}
+          {!UserSavingLastMonth?.total ? "Oups :(" : "Congratulations !"}
         </span>
         <span className="text-sm font-black  text-slate-700">
           You have saved{" "}
           {Loading
             ? "..."
-            : `$ ${parseFloat(
-                UserSavingLastMonth?.total
-              ).toLocaleString()}`}{" "}
+            : `$ ${Number(UserSavingLastMonth?.total || 0)
+                .toFixed(2)
+                .toLocaleString()}`}{" "}
           last month !
         </span>
       </div>

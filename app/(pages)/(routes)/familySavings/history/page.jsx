@@ -1,22 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchDataFromDB } from "@/redux/slices/userSlice";
-import SavingsCardLastMonth from "@/app/components/cards/SavingsCardLastMonth";
-import OverviewChartDashboard from "@/app/components/charts/overviewChartDashboard";
 import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
-import SavingsCategories from "@/app/components/cards/SavingsCategories";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { BsBoxArrowUpRight, BsPlusCircleDotted } from "react-icons/bs";
-
 function page() {
   const [Loading, setLoading] = useState();
-  const { items, loading, error } = useSelector((state) => state.userData);
-  const [monthlyStats, setMonthlyStats] = useState([]);
   const [LatestSavings, setLatestSavings] = useState([]);
-  const [SavingsGoals, setSavingsGoals] = useState([]);
-
-  const dispatch = useDispatch();
   // Table's Column
   const columns = [
     {
@@ -34,6 +23,10 @@ function page() {
       ),
     },
     {
+      name: "Saving Goal",
+      selector: (row) => row.SavingName,
+    },
+    {
       name: "Description",
       selector: (row) => row.Description,
       grow: 2,
@@ -46,8 +39,9 @@ function page() {
       name: "Total",
       selector: (row) => "$ " + String(row.total.toFixed(2)),
     },
+
     {
-      name: "Date Created",
+      name: "Date created",
       selector: (row) =>
         new Date(row.date_created).toLocaleDateString("default", {
           month: "long",
@@ -55,6 +49,7 @@ function page() {
           day: "2-digit",
         }),
     },
+
     {
       name: "",
       selector: (row) => (
@@ -62,7 +57,7 @@ function page() {
           className="bg-blue-950 hover:bg-blue-600 ease-out duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-sm flex flex-row items-center gap-2 justify-center"
           onClick={() => {
             window.open(
-              `/savings/contributions/${row.SavingsHistoryID}`,
+              `/familySavings/contributions/${row.SavingsHistoryID}`,
               "_blank"
             );
           }}
@@ -77,20 +72,12 @@ function page() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      // Monthly Stats
-      await fetch("/api/savings/stats", { method: "GET" }).then(async (res) => {
-        const data = await res.json();
-        setMonthlyStats(data);
-      });
-      await fetch("/api/savings/", { method: "GET" }).then(async (res) => {
-        const data = await res.json();
-        setLatestSavings(data.Savings);
-      });
-      await fetch("/api/savings/goal", { method: "GET" }).then(async (res) => {
-        const data = await res.json();
-        setSavingsGoals(data.Savings);
-      });
-
+      await fetch("/api/familySavings/", { method: "GET" }).then(
+        async (res) => {
+          const data = await res.json();
+          setLatestSavings(data.Savings);
+        }
+      );
       setLoading(false);
     } catch (e) {
       console.log(e);
@@ -98,58 +85,40 @@ function page() {
   };
   useEffect(() => {
     fetchData();
-    document.title = "Create new Saving Goal";
+    document.title = "Family savings contributions history";
   }, []);
-  useEffect(() => {
-    dispatch(fetchDataFromDB());
-  }, [dispatch]);
+
   return Loading ? (
     <ComponentLoader />
   ) : (
     <>
       <div className=" pb-5">
-        <span className="text-3xl  font-black  text-blue-950 ">Savings</span>
+        <span className="text-3xl  font-black  text-blue-950 ">
+          Family savings History
+        </span>
       </div>
-      <div className="flex  flex-row  gap-10 w-full max-lg:flex-col">
-        <div className="flex flex-col gap-10 w-[60%] px-2 max-lg:w-full">
-          <SavingsCardLastMonth
-            Loading={loading}
-            UserSavingLastMonth={items?.userBudget?.UserSavingLastMonth}
-          />
-          <div className="w-full max-h-[400px] bg-white rounded-lg flex flex-col gap-3 p-4">
-            <div className="flex flex-col gap-1">
-              <span className="text-xl  font-black  text-blue-950">
-                Overview
-              </span>
-              <span className="text-md  text-slate-700">Monthly Savings</span>
-            </div>
-            <div className="w-[full] h-[300px] ">
-              <OverviewChartDashboard data={monthlyStats} />
-            </div>
-          </div>
-        </div>
-        <SavingsCategories data={SavingsGoals} isFamily={false} />
-      </div>
-      <div className="flex bg-white rounded-lg mt-8 flex-col p-4 gap-2  max-lg:flex-col">
+
+      <div className="flex bg-white rounded-lg  flex-col p-4 gap-2  max-lg:flex-col">
         <div className="flex flex-row justify-between gap-2 w-full">
           <div className="flex flex-col gap-2">
             <span className="text-xl  font-black  text-blue-950">
-              Latest Savings Contributions
+              Latest family Contributions
             </span>
             <span className="text-md text-slate-700">
-              Your contributions history
+              Family's contributions history
             </span>
           </div>
           <button
             className="bg-blue-950 hover:bg-blue-600 ease-out h-fit duration-500 transition-all rounded-lg p-3 text-slate-200 font-medium text-sm flex flex-row items-center gap-2 justify-center"
             onClick={() => {
-              window.open(`/savings/contributions/new`, "_blank");
+              window.open(`/familySavings/add`, "_blank");
             }}
           >
             <span className="flex-1">Create a contribution</span>
             <BsPlusCircleDotted className="min-w-[15px] h-[15px] " />
           </button>
         </div>
+
         <LatestTransactionsTable data={LatestSavings} columns={columns} />
       </div>
     </>
