@@ -8,9 +8,10 @@ async function getSavingGoals() {
   const session = await getServerSession(authOptions);
   if (session && session.user.role === 0) {
     try {
+      console.log(session.user);
       // We export the Stats from DB based on the UserID from the session :
       const Savings = await prisma.family_savings.findMany({
-        where: { FamilyID: session.user.familyId },
+        where: { FamilyID: session.user.familyID },
       });
       if (!Savings) {
         return NextResponse.json(

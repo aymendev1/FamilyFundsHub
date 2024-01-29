@@ -114,14 +114,21 @@ export const authOptions = {
         //Let's check if user already exists
         const userExists = await prisma.users.findUnique({
           where: { email: profile.email },
-          select: { name: true, familyID: true, role: true, id: true },
+          select: {
+            name: true,
+            familyID: true,
+            role: true,
+            id: true,
+            email: true,
+          },
         });
         // In case User not found, we create a new user
         return {
           ...token,
           id: userExists.id,
-          familyId: userExists.familyID,
+          familyID: userExists.familyID,
           role: userExists.role,
+          name: userExists.name,
         };
       }
       if (user) {
@@ -129,8 +136,9 @@ export const authOptions = {
         return {
           ...token,
           id: user.id,
-          familyId: user.familyID,
+          familyID: user.familyID,
           role: user.role,
+          name: user.name,
         };
       }
 
@@ -143,8 +151,9 @@ export const authOptions = {
         user: {
           ...session.user,
           id: token.id,
-          familyId: token.familyId,
+          familyID: token.familyID,
           role: token.role,
+          name: token.name,
         },
       };
     },

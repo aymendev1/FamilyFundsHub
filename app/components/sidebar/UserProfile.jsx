@@ -1,7 +1,6 @@
 "use client";
-import SidebarProfileLoader from "../loadings/SidebarProfileLoader";
 function UserProfile(props) {
-  const { toggle, data } = props;
+  const { toggle, data, profilePicture } = props;
 
   return (
     <div
@@ -14,9 +13,7 @@ function UserProfile(props) {
       {/*Profile Picture */}
       <div className="min-w-[4rem] h-[4rem]">
         <img
-          src={
-            data?.profilePicture ? data.profilePicture : "/userProfileTest.jpg"
-          }
+          src={profilePicture || "/userProfileTest.jpg"}
           alt="Profile Picture"
           className="w-full h-full rounded-full object-cover"
         />

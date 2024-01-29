@@ -25,7 +25,7 @@ FROM
 INNER JOIN users ON family_savings_history.UserID = users.id
 INNER JOIN family_savings ON family_savings.SavingID = family_savings_history.SavingID
 WHERE
-    family_savings_history.familyID = ${session.user.familyId}
+    family_savings_history.familyID = ${session.user.familyID}
 ORDER BY
     family_savings_history.date_created
 DESC  `;
@@ -90,7 +90,7 @@ async function CreateSavingContr(req) {
           Description: Description,
           Status: Status,
           total: parseFloat(Total),
-          familyID: Number(session.user.familyId),
+          familyID: Number(session.user.familyID),
         },
       });
       const updateSavingGoal = await prisma.family_savings.update({

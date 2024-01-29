@@ -15,7 +15,7 @@ DATE_FORMAT(Date_created, '%Y-%m') AS month,
 SUM(Total) AS monthly_savings
 FROM
 family_savings_history
-WHERE familyID=${Number(session.user.familyId)}
+WHERE familyID=${Number(session.user.familyID)}
 GROUP BY
 UserID, month
 ORDER BY

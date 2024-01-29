@@ -285,7 +285,7 @@ async function SendInviteEmail(req) {
         .update(inviteTokenHex)
         .digest("hex");
       const UpdateFamily = await prisma.family.update({
-        where: { id: session.user.familyId },
+        where: { id: session.user.familyID },
         data: {
           invite_token: inviteToken,
           invite_token_expiry: tomorrow,

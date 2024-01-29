@@ -6,7 +6,7 @@ function ActionMenu() {
   const router = useRouter();
   const MenuList = [
     { title: "Add expense", link: "/transactions/new" },
-    { title: "View transactions", link: "/transactions" },
+    { title: "Add Balance", link: "/balance/new" },
     { title: "Savings History", link: "/savings/history" },
     { title: "Create saving goal", link: "/savings/new" },
     { title: "Add saving contribution", link: "/contributions/new" },
