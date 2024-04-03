@@ -36,11 +36,7 @@ function sidebar(props) {
           } text-3xl text-blue-950 transition-all duration-300 `}
         />
       </button>
-      <UserProfile
-        toggle={toggle}
-        data={data}
-        profilePicture={items?.user?.profilePicture}
-      />
+      <UserProfile toggle={toggle} data={items?.user} />
       <SidebarData toggle={toggle} username={items?.user?.username} />
     </div>
   );

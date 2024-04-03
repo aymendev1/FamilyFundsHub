@@ -1,10 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { useState } from "react";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SyncLoader } from "react-spinners";
 
-function QuickTransferCard(props) {
+export default function QuickTransferCard(props) {
   const { FamilyMembers, userBudget } = props;
   const [selectedUser, setSelectedUser] = useState("");
   const [AmountToSent, setAmountToSent] = useState(0);
@@ -25,7 +25,7 @@ function QuickTransferCard(props) {
       }
     }
   };
-  const handleSubmitCard = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     if (parseFloat(userBudget) < parseFloat(AmountToSent)) {
@@ -142,7 +142,7 @@ function QuickTransferCard(props) {
           </div>
           <button
             className="bg-blue-950 hover:bg-blue-900 hover:delay-100 transition rounded-lg p-3 text-slate-200 font-medium text-base"
-            onClick={handleSubmitCard}
+            onClick={handleSubmit}
           >
             Send Money
           </button>
@@ -151,5 +151,3 @@ function QuickTransferCard(props) {
     </div>
   );
 }
-
-export default QuickTransferCard;

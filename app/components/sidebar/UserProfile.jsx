@@ -1,7 +1,6 @@
 "use client";
 function UserProfile(props) {
-  const { toggle, data, profilePicture } = props;
-
+  const { toggle, data } = props;
   return (
     <div
       className={`flex gap-5 items-center 
@@ -13,7 +12,7 @@ function UserProfile(props) {
       {/*Profile Picture */}
       <div className="min-w-[4rem] h-[4rem]">
         <img
-          src={profilePicture || "/userProfileTest.jpg"}
+          src={data?.profilePicture || "/userProfileTest.jpg"}
           alt="Profile Picture"
           className="w-full h-full rounded-full object-cover"
         />

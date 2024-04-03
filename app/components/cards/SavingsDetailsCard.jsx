@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
-import LatestTransactionsTable from "../tables/LatestTransactionsTable";
+import LatestTransactionsTable from "../tables/CustomTable";
 import { BsShieldLockFill } from "react-icons/bs";
 
 export default function SavingsDetailsCard(props) {
