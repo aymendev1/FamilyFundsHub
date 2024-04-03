@@ -29,10 +29,6 @@ async function getUser() {
         .toString("base64")
         .replace("dataimage/jpegbase64", "data:image/jpeg;base64,");
 
-      const familyBudget = await prisma.budget.findUnique({
-        where: { familyID: user.familyID },
-        select: { familyID: true, total_income: true, total_expense: true },
-      });
       const familyDetails = await prisma.family.findUnique({
         where: { id: user.familyID },
         select: { id: true, familyName: true },
@@ -117,7 +113,6 @@ async function getUser() {
       return NextResponse.json(
         {
           user,
-          familyBudget,
           familyMembers,
           familyDetails,
           userBudget,
