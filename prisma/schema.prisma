@@ -1,0 +1,160 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model expensecategories {
+  CategoryID   Int        @id @default(autoincrement())
+  CategoryName String?    @db.VarChar(255)
+  date_created DateTime?  @default(now()) @db.DateTime(0)
+  date_updated DateTime?  @default(now()) @db.DateTime(0)
+  expenses     expenses[]
+}
+
+model expenses {
+  ExpenseID         Int               @id @default(autoincrement())
+  UserID            Int
+  CategoryID        Int
+  Total             Float?            @default(0) @db.Float
+  Date_created      DateTime?         @default(now()) @db.DateTime(0)
+  Description       String?           @db.VarChar(255)
+  date_updated      DateTime          @default(now()) @db.DateTime(0)
+  isTransfer        Boolean?          @default(false)
+  receiver_id       Int?
+  users             users             @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expenses_ibfk_1")
+  expensecategories expensecategories @relation(fields: [CategoryID], references: [CategoryID], onDelete: NoAction, onUpdate: NoAction, map: "expenses_ibfk_2")
+
+  @@index([CategoryID], map: "CategoryID")
+  @@index([UserID], map: "UserID")
+}
+
+model family {
+  id                     Int                      @id @default(autoincrement())
+  familyName             String                   @db.VarChar(255)
+  date_created           DateTime?                @default(now()) @db.DateTime(0)
+  date_updated           DateTime?                @default(now()) @db.DateTime(0)
+  invite_token           String?                  @db.MediumText
+  invite_token_expiry    DateTime?                @db.Date
+  family_savings         family_savings[]
+  family_savings_history family_savings_history[]
+  users                  users[]
+}
+
+model income {
+  IncomeID     Int       @id @default(autoincrement())
+  FamilyID     Int
+  UserID       Int
+  Total        Int?      @default(0)
+  Date_created DateTime? @default(now()) @db.DateTime(0)
+  Description  String?   @db.VarChar(255)
+  TransferID   Int?
+  users        users     @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "income_ibfk_1")
+
+  @@index([UserID], map: "UserID")
+}
+
+model users {
+  id                     Int                      @id @default(autoincrement())
+  username               String                   @unique @db.VarChar(255)
+  email                  String                   @unique @db.VarChar(255)
+  password               String                   @db.VarChar(255)
+  bio                    String?                  @default("No bio yet !") @db.VarChar(255)
+  role                   Int
+  familyID               Int?
+  date_created           DateTime?                @default(now()) @db.DateTime(0)
+  date_updated           DateTime?                @default(now()) @db.DateTime(0)
+  name                   String?                  @db.Text
+  profilePicture         Bytes
+  balance                Float                    @default(0) @db.Float
+  address                String?                  @default("No Address Yet !") @db.VarChar(55)
+  coverPicture           Bytes
+  reset_token            String?                  @db.MediumText
+  reset_token_expiry     DateTime?                @db.Date
+  expenses               expenses[]
+  family_savings_history family_savings_history[]
+  income                 income[]
+  family                 family?                  @relation(fields: [familyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+  users_savings          users_savings[]
+  users_savings_history  users_savings_history[]
+
+  @@index([familyID], map: "FamilyID")
+}
+
+model family_savings {
+  SavingID               Int                      @id @default(autoincrement())
+  FamilyID               Int
+  total                  Float?                   @default(0) @db.Float
+  date_created           DateTime?                @default(now()) @db.DateTime(0)
+  date_start             DateTime?                @default(now()) @db.DateTime(0)
+  date_end               DateTime?                @default(now()) @db.DateTime(0)
+  date_updated           DateTime?                @default(now()) @db.DateTime(0)
+  Status                 String?                  @db.VarChar(255)
+  Description            String?                  @db.VarChar(255)
+  family                 family                   @relation(fields: [FamilyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_ibfk_1")
+  family_savings_history family_savings_history[]
+
+  @@index([FamilyID], map: "FamilyID")
+}
+
+model family_savings_history {
+  SavingsHistoryID Int            @id @default(autoincrement())
+  SavingID         Int
+  UserID           Int
+  date_created     DateTime?      @default(now()) @db.DateTime(0)
+  total            Float?         @db.Float
+  Status           String?        @db.VarChar(255)
+  Description      String?        @db.VarChar(255)
+  familyID         Int
+  family_savings   family_savings @relation(fields: [SavingID], references: [SavingID], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_history_ibfk_1")
+  users            users          @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_history_ibfk_2")
+  family           family         @relation(fields: [familyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_history_ibfk_3")
+
+  @@index([SavingID], map: "SavingID")
+  @@index([UserID], map: "UserID")
+  @@index([familyID], map: "familyID")
+}
+
+model users_savings {
+  SavingID              Int                     @id @default(autoincrement())
+  UserID                Int
+  total                 Float?                  @default(0) @db.Float
+  date_created          DateTime?               @default(now()) @db.DateTime(0)
+  date_start            DateTime?               @default(now()) @db.DateTime(0)
+  date_end              DateTime?               @default(now()) @db.DateTime(0)
+  date_updated          DateTime?               @default(now()) @db.DateTime(0)
+  Status                String?                 @db.VarChar(255)
+  Description           String?                 @db.VarChar(255)
+  users                 users                   @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_savings_ibfk_1")
+  users_savings_history users_savings_history[]
+
+  @@index([UserID], map: "UserID")
+}
+
+model users_savings_history {
+  SavingsHistoryID Int           @id @default(autoincrement())
+  SavingID         Int
+  UserID           Int
+  date_created     DateTime?     @default(now()) @db.DateTime(0)
+  total            Float?        @db.Float
+  Status           String?       @db.VarChar(255)
+  Description      String?       @db.VarChar(255)
+  users_savings    users_savings @relation(fields: [SavingID], references: [SavingID], onDelete: NoAction, onUpdate: NoAction, map: "users_savings_history_ibfk_1")
+  users            users         @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_savings_history_ibfk_2")
+
+  @@index([SavingID], map: "SavingID")
+  @@index([UserID], map: "UserID")
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view monthly_income_view {
+  UserID        Int
+  month         String?  @db.VarChar(7)
+  monthlyIncome Decimal? @db.Decimal(32, 0)
+
+  @@ignore
+}

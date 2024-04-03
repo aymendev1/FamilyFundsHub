@@ -1,6 +1,7 @@
 import React from "react";
 
-function CreditCard() {
+function CreditCard(props) {
+  const { data } = props;
   return (
     <>
       <div className=" card relative font-[2rem] w-[85%] h-[200px] p-4 flex flex-col gap-1 overflow-hidden max-xl:h-[200px] max-xl:gap-1 max-lg:w-full">
@@ -27,19 +28,19 @@ function CreditCard() {
         <div className="flex flex-col gap-[1px]">
           <span className="text-md  text-slate-400">Full Name</span>
           <span className="text-xl  text-white font-bold bigText">
-            Aymen Azougar
+            {data?.userDetails?.name}
           </span>
         </div>
         <div className="flex flex-col gap-[1px]">
           <span className="text-md text-slate-400">Balance</span>
           <span className="text-2xl text-white font-bold bigText ">
-            $ 5,875
+            $ {data?.userDetails?.balance}
           </span>
         </div>
         <div className="flex flex-col gap-[1px]">
           <span className="text-md text-slate-400">Family</span>
           <span className="text-xl text-white font-bold bigText ">
-            Azougar Family
+            {data?.familyDetails?.familyName}
           </span>
         </div>
       </div>

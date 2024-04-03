@@ -1,29 +1,32 @@
-import React from "react";
-import Image from "next/image";
+"use client";
 function UserProfile(props) {
+  const { toggle, data } = props;
   return (
     <div
       className={`flex gap-5 items-center 
          transition-all duration-300 delay-200
            bg-white rounded-xl p-2
+           max-md:flex-col
       `}
     >
-      {/*    Profile Picture */}
-      <div className="min-w-[3.5rem] h-[3.5rem]">
-        <Image
-          src="/userProfileTest.jpg"
+      {/*Profile Picture */}
+      <div className="min-w-[4rem] h-[4rem]">
+        <img
+          src={data?.profilePicture || "/userProfileTest.jpg"}
           alt="Profile Picture"
-          width="60"
-          height="60"
           className="w-full h-full rounded-full object-cover"
-        />{" "}
+        />
       </div>
       {/* Profile Name */}
-      <div className={`flex flex-col delay-100`}>
-        <span className="text-xl  font-black  text-blue-950 ">
-          Aymen Azougar
+      <div
+        className={`${
+          toggle ? "max-md:hidden" : " "
+        }  flex flex-col delay-100 max-md:items-center`}
+      >
+        <span className="text-xl max-md:text-center font-black  text-blue-950 ">
+          {data?.name}
         </span>
-        <span className="text-[0.75rem] text-slate-500">test@gmail.com</span>
+        <span className="text-[0.75rem] text-slate-500"> {data?.email}</span>
       </div>
     </div>
   );

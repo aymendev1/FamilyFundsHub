@@ -19,14 +19,15 @@ ChartJS.register(
   Legend
 );
 
-function overviewChartDashboard() {
+function overviewChartDashboard(props) {
+  const { data } = props;
   const ChartProps = {
-    labels: ["Red", "Orange", "Blue"],
+    labels: data?.Months,
     // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
     datasets: [
       {
         label: "Spent this month",
-        data: [55, 23, 400],
+        data: data?.stats,
         // you can set indiviual colors for each bar
         backgroundColor: ["#17255480"],
         borderWidth: 1,

@@ -1,6 +1,10 @@
-import React from "react";
+"use client";
+import { useState } from "react";
 
-function TotalBalanceCard() {
+function TotalBalanceCard(props) {
+  const { data } = props;
+  const [CurrentBalance, setCurrentBalance] = useState(0);
+
   return (
     <div className=" bg-white rounded-lg relative font-[2rem] w-full h-[250px] p-4 flex flex-col gap-4 overflow-hidden max-xl:h-[200px] max-xl:gap-1 max-lg:w-full">
       {/* Blobs  */}
@@ -23,25 +27,32 @@ function TotalBalanceCard() {
         </svg>
       </div>
 
-      <span className="text-xl  font-black  text-blue-950">Total Balance</span>
-      <span className="text-3xl  font-black  text-blue-800 bigText">
-        $ 4,567.12
+      <span className="text-xl max-sm:text-lg font-black  text-blue-950">
+        Total Balance
+      </span>
+      <span className="text-3xl  max-sm:text-2xl font-black  text-blue-800 bigText">
+        ${parseFloat(data?.UserBudget).toLocaleString()}
       </span>
       <div className="flex flex-row gap-2 w-full justify-between">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 max-lg:gap-1">
           <span className="text-sm  text-slate-700">Income This Month</span>
           <span className="text-base text-emerald-700 font-black bigText ">
-            $4,567.12
+            ${parseFloat(data?.incomeThisMonth).toLocaleString()}
           </span>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 max-lg:gap-1">
           <span className="text-sm  text-slate-700">Spent This month</span>
           <span className="text-base text-violet-800 font-black bigText ">
-            $4,000.12
+            ${parseFloat(data?.ExpenseThisMonth).toLocaleString()}
           </span>
         </div>
       </div>
-      <button className="bg-blue-950 hover:bg-blue-900 hover:delay-100 transition rounded-lg p-3 text-slate-200 font-medium text-base">
+      <button
+        onClick={() => {
+          window.open("/transactions");
+        }}
+        className="bg-blue-950 hover:bg-blue-900 hover:delay-100 transition rounded-lg p-3 max-md:p-1 max-md:text-base text-slate-200 font-medium text-base"
+      >
         View More
       </button>
     </div>

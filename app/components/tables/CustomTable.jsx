@@ -4,7 +4,9 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Suspense } from "react";
 import Loading from "@/app/components/loadings/tableLoading";
-export default function LatestTransactionsTable() {
+
+export default function LatestTransactionsTable(props) {
+  const { columns, data } = props;
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const customStyles = {
@@ -41,7 +43,7 @@ export default function LatestTransactionsTable() {
     setSelectedRows(state.selectedRows);
   }, []);
 
-  const columns = [
+  /*   const columns = [
     {
       name: "Member",
       selector: (row) => (
@@ -140,10 +142,8 @@ export default function LatestTransactionsTable() {
       status: "Completed",
       date: "2022-10-20",
     },
-  ];
-  useEffect(() => {
-    console.log("state", selectedRows);
-  }, [selectedRows]);
+  ]; */
+  useEffect(() => {}, [selectedRows]);
   useEffect(() => {
     const timeout = setTimeout(() => {
       setLoading(false);
