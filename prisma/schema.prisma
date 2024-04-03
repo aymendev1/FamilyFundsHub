@@ -8,18 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model budget {
-  id            Int       @id @default(autoincrement())
-  familyID      Int       @unique
-  total_income  Float?    @default(0) @db.Float
-  total_expense Float?    @default(0) @db.Float
-  date_created  DateTime? @default(now()) @db.DateTime(0)
-  date_updated  DateTime? @default(now()) @db.DateTime(0)
-  family        family    @relation(fields: [familyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "budget_ibfk_1")
-
-  @@index([familyID], map: "FamilyID")
-}
-
 model expensecategories {
   CategoryID   Int        @id @default(autoincrement())
   CategoryName String?    @db.VarChar(255)
@@ -46,15 +34,15 @@ model expenses {
 }
 
 model family {
-  id                  Int              @id @default(autoincrement())
-  familyName          String           @db.VarChar(255)
-  date_created        DateTime?        @default(now()) @db.DateTime(0)
-  date_updated        DateTime?        @default(now()) @db.DateTime(0)
-  invite_token        String?          @db.MediumText
-  invite_token_expiry DateTime?        @db.Date
-  budget              budget[]
-  family_savings      family_savings[]
-  users               users[]
+  id                     Int                      @id @default(autoincrement())
+  familyName             String                   @db.VarChar(255)
+  date_created           DateTime?                @default(now()) @db.DateTime(0)
+  date_updated           DateTime?                @default(now()) @db.DateTime(0)
+  invite_token           String?                  @db.MediumText
+  invite_token_expiry    DateTime?                @db.Date
+  family_savings         family_savings[]
+  family_savings_history family_savings_history[]
+  users                  users[]
 }
 
 model income {
@@ -124,9 +112,11 @@ model family_savings_history {
   familyID         Int
   family_savings   family_savings @relation(fields: [SavingID], references: [SavingID], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_history_ibfk_1")
   users            users          @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_history_ibfk_2")
+  family           family         @relation(fields: [familyID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "family_savings_history_ibfk_3")
 
   @@index([SavingID], map: "SavingID")
   @@index([UserID], map: "UserID")
+  @@index([familyID], map: "familyID")
 }
 
 model users_savings {
