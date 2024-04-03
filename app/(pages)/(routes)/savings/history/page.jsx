@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
+import LatestTransactionsTable from "@/app/components/tables/CustomTable";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { BsBoxArrowUpRight, BsPlusCircleDotted } from "react-icons/bs";
 function page() {

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import OverviewChartDashboard from "@/app/components/charts/overviewChartDashboard";
-import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
+import LatestTransactionsTable from "@/app/components/tables/CustomTable";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { BsBoxArrowUpRight } from "react-icons/bs";
 

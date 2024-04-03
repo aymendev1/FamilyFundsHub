@@ -5,7 +5,7 @@ import TotalBalanceCard from "@/app/components/cards/TotalBalanceCard";
 import QuickTransferCard from "@/app/components/cards/QuickTransferCard";
 import CategorySpendCards from "@/app/components/cards/CategorySpendCards";
 import ActionMenu from "@/app/components/Menus/ActionMenu";
-import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
+import LatestTransactionsTable from "@/app/components/tables/CustomTable";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchDataFromDB } from "@/redux/slices/userSlice";
 import { BsBoxArrowUpRight } from "react-icons/bs";

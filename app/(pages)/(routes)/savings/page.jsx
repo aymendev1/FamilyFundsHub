@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchDataFromDB } from "@/redux/slices/userSlice";
 import SavingsCardLastMonth from "@/app/components/cards/SavingsCardLastMonth";
 import OverviewChartDashboard from "@/app/components/charts/overviewChartDashboard";
-import LatestTransactionsTable from "@/app/components/tables/LatestTransactionsTable";
+import LatestTransactionsTable from "@/app/components/tables/CustomTable";
 import SavingsCategories from "@/app/components/cards/SavingsCategories";
 import ComponentLoader from "@/app/components/loadings/ComponentLoader";
 import { BsBoxArrowUpRight, BsPlusCircleDotted } from "react-icons/bs";

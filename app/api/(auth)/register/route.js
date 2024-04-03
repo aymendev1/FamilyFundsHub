@@ -164,7 +164,7 @@ async function UpdatePass(req) {
           password: true,
         },
       });
-      //we check if username or email is already user by another member
+
       const passwordMatch = await bcrypt.compare(oldPass, userPass.password);
 
       if (passwordMatch) {
