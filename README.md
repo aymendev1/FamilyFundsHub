@@ -61,3 +61,21 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature/your-feature-name`.
+3. Make your changes and commit them: `git commit -m 'Add some feature'`.
+4. Push to the branch: `git push origin feature/your-feature-name`.
+5. Open a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For any questions or feedback, please contact [aymendev1](https://aymendev1.com/?utm_source=github).
